@@ -21,3 +21,7 @@ This document serves as a roadmap for the tasks that need to be completed during
    - Slap v1.0.0 on it and call it a day.
 6. **Future Enhancements:**
    - Identify and plan for the next set of core features to be added.
+
+## Timeframe
+
+By the end of July, there should be a concrete idea of how to build Project Miracle, and progress should have already been started towards completing it. Ideally, v1.0.0 of the project should be done at least by the end of August, allowing for more complex development to take place over the rest of the year.
