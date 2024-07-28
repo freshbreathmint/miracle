@@ -3,10 +3,37 @@
     // for the documentation about the tasks.json format
     "version": "2.0.0",
     "tasks": [
+        // Linux Build Tasks
         {
-            "label": "build",
+            "label": "build-linux",
             "type": "shell",
             "command": "gcc src/*.c -o bin/executable"
-        }
+        },
+        {
+            "label": "run-linux",
+            "type": "process",
+            "command": "./bin/executable"
+        },
+        {
+            "label": "build-and-run-linux",
+            "dependsOrder": "sequence",
+            "dependsOn": ["build-linux", "run-linux"]
+        },
+        // Windows Build Tasks
+        {
+            "label": "build-windows",
+            "type": "shell",
+            "command": "x86_64-w64-mingw32-gcc src/*.c -o bin/executable"
+        },
+        {
+            "label": "run-windows",
+            "type": "process",
+            "command": "./bin/executable.exe"
+        },
+        {
+            "label": "build-and-run-windows",
+            "dependsOrder": "sequence",
+            "dependsOn": ["build-windows", "run-windows"]
+        },
     ]
 }
