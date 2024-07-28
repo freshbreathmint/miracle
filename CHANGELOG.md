@@ -2,5 +2,13 @@
 
 ## IN DEVELOPMENT
 
+N/A
+
+## Version 0.1.0
+
 Changes:
-    N/A
+    - Set up VS Code Extensions & Build Tasks
+    - Set up Changelog & Readme
+    - Set up gitignore
+    - Created initial project structure.
+    - Started documentation.
