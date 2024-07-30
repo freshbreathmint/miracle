@@ -8,7 +8,7 @@ For more information, see [About](doc/About.md) in the documentation.
 
 ## Building
 
-To learn about the build system, please refer to the [documentation](doc/Build_System.md).
+To learn about the build system, please refer to the [documentation](doc/Build%20System.md).
 
 ## Credits
 
