@@ -1,27 +1,27 @@
-## About
+# About
 
-This document serves as a roadmap for the tasks that need to be completed during the development of Project Miracle. For now, it will function as a 'to-do' list.
+This document serves as a roadmap for the tasks that need to be completed during the development of Miracle Framework. For now, it will function as a 'to-do' list.
 
 ## Roadmap
 
-1. **Define Basic Functionality:**
-   - Determine the core features and how they will function within the framework.
-2. **Initiate Project and Prototype:**
-   - Start the project in Visual Studio Code.
-   - Develop a robust build system.
-   - Create a prototype based on the defined core features.
-3. **Iterative Development:**
-   - Continue developing the project until the core features are refined.
-4. **Finalize and Optimize:**
-   - Get the project to a state where all core features are working as intended without issue.
-   - Refine and finalize project documentation for version 1.0.0
-5. **Project Completion:**
-   - Create and deploy an application *designed* to demonstrate the core features.
-   - Create and deploy a moderately simple application and utilize the core features.
-   - Slap v1.0.0 on it and call it a day.
-6. **Future Enhancements:**
-   - Identify and plan for the next set of core features to be added.
+1. **Framework Submodule Design:**
+   - Reconfigure the project architecture to integrate the framework as a submodule within an application project.
+2. **Application Build System:**
+   - Adapt the existing build system to support the application project, while maintaining necessary infrastructure within the submodule.
+3. **Library Loading:**
+   - Establish a streamlined system for loading and executing application libraries.
+4. **Develop Hot Reloading Capability:**
+   - Implement a system for hot reloading libraries when new versions are compiled.
+   - Extend the hot reloading system to support application hot reloading.
+5. **Implement Profiling System:**
+   - Design and develop a method for profiling functions within the application library.
+6. **Finalize and Optimize:**
+   - Ensure that hot reloading and profiling features are fully operational and stable.
+   - Review and finalize project documentation for version 1.0.0.
+   - Develop and deploy an application to demonstrate the core features of the framework.
+7. **Future Enhancements:**
+   - Identify and plan the next set of core features for future framework updates.
 
 ## Timeframe
 
-By the end of July, there should be a concrete idea of how to build Project Miracle, and progress should have already been started towards completing it. Ideally, v1.0.0 of the project should be done at least by the end of August, allowing for more complex development to take place over the rest of the year.
+Ideally version 1.0.0 should be complete by the end of August 2024.

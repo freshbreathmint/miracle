@@ -1,24 +1,49 @@
-## About
+# Overview
 
-This document will serve as an opportunity to workshop and design the initial build system for Project Miracle.
+This documentation outlines the requirements, and current configuration of the Miracle Framework build system.
 
-## Current Development
+The Miracle Framework build system is designed to streamline the development process by providing an efficient and flexible system for compiling and running projects across different platforms.
 
-Currently, development is focused on creating a build system around WSL (Windows Subsystem for Linux). The goal is to set up VS Code tasks to compile and run the application for both Linux and Windows environments.
+The current build system utilizes Visual Studio Code tasks invoking simple bash commands for the selected platform's appropriate compilers, with future plans to transition to a more complex system. 
+
+## Requirements
+
+To start and build a project using the Miracle Framework, ensure you have the following:
+
+- **Linux Environment**: Either native Linux or Windows Subsystem for Linux (WSL).
+- **Visual Studio Code**:
+    - Install and enable the recommended extensions for Miracle Framework.
+- **Compilers**:
+    - `gcc` for Linux builds.
+    - `x86_64-w64-mingw32-gcc` for Windows builds.
+
+## Details
+
+The build system is currently implemented using several VS Code tasks, with status bar buttons to compile and run versions for both Linux and Windows.
+
+Both the Linux and Windows build tasks use simple bash commands to invoke the respective compilers, compiling all source files in the `/src` folder and outputting the executable to the `/bin` folder.
+
+Compilers Used:
+- **Linux**: `gcc`
+- **Windows**: `x86_64-w64-mingw32-gcc`
+
+In the future, we plan to transition to a build system utilizing makefiles or CMake. This new system will accommodate the Miracle Framework as a submodule embedded within other projects.
+
+Currently, the build system supports native Linux users or Windows Subsystem for Linux (WSL) users. To build for both Windows and Linux, it is recommended to use WSL.
 
 ### Key Challenges
 
-1. **Interacting Between Windows and WSL:**
-   - Figuring out seamless interaction between Windows and WSL is a primary challenge.
-   - The file systems are separate so it's a matter of figuring out how to launch something in Windows from within WSL.
-2.  **Running and Compiling:**
-   - Running the application on Windows should be as simple as pressing a task button to compile and execute natively.
-   - Running the Linux version of the program within WSL should ideally perform as well as running it natively on Windows, although this requires further research on executing GUI applications using WSL.
-3. **Hot Reloading:**
-   - Hot Reloading should function correctly when running a Windows build natively, even if it is not as critical.
+1. **Hot Reloading:**
+   - Hot Reloading, when implemented, should function correctly when running a Windows build natively, even if it is not as critical.
    - This should not be an issue for Linux builds.
+
+### Planned Improvements
+
+1. **Clean Task**
+   - Add a task to clean the `/bin` folder.
 
 ## Unorganized Ideas
 
-1. The system should be based around the idea of application development.
-   - This means that setting up a new project that uses Project Miracle as a framework should be minimally cumbersome.
+1. The build system should facilitate application development.
+   - Setting up a new project using Miracle Framework should be straightforward and minimally cumbersome.
+   - Should be as simple as adding a git submodule to the Application's project files.
