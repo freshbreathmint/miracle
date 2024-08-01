@@ -2,7 +2,8 @@
 
 ## IN DEVELOPMENT
 
-N/A
+Changes:
+    - Reconfigured Framework to work based on an external application folder.
 
 ## Version 0.1.0
 
