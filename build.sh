@@ -40,7 +40,6 @@ make() {
 
     # Build executable
     cmake --build build/$PLATFORM
-    echo "Build for platform '$PLATFORM' complete."
 }
 
 # Execute arguments
