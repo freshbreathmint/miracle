@@ -5,7 +5,7 @@ project(executable)
 
 # Set output directory based on build type.
 if (DEFINED PLATFORM)
-    message("Building for platform ${PLATFORM}")
+    message("Building for platform '${PLATFORM}'.")
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin/${PLATFORM})
 endif()
 
