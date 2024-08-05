@@ -24,12 +24,26 @@ make() {
     # Create build directory if it doesn't already exist
     mkdir -p build/$PLATFORM
     
-    # Generate build files & execute build
-    cmake -B build/$PLATFORM -DPLATFORM=$PLATFORM
+    # Generate build files for the specified platform
+    case $PLATFORM in
+        windows)
+            cmake -B build/$PLATFORM -DCMAKE_TOOLCHAIN_FILE=windows.cmake -DPLATFORM=$PLATFORM
+            ;;
+        native)
+            cmake -B build/$PLATFORM -DPLATFORM=$PLATFORM
+            ;;
+        *)
+            echo "Error: Unsupported platform specified. Please specify [native|windows]."
+            exit 1
+            ;;
+    esac
+
+    # Build executable
     cmake --build build/$PLATFORM
     echo "Build for platform '$PLATFORM' complete."
 }
 
+# Execute arguments
 case $ACTION in
     make)
         make

@@ -3,16 +3,22 @@
     // for the documentation about the tasks.json format
     "version": "2.0.0",
     "tasks": [
+        // Clean build files
+        {
+            "label": "clean",
+            "type": "shell",
+            "command": "./build.sh clean"
+        },
         // Linux Build Tasks
         {
             "label": "build-linux",
             "type": "shell",
-            "command": "gcc src/*.c -o ../bin/executable"
+            "command": "./build.sh make native"
         },
         {
             "label": "run-linux",
             "type": "process",
-            "command": "../bin/executable"
+            "command": "./bin/native/executable"
         },
         {
             "label": "build-and-run-linux",
@@ -23,12 +29,12 @@
         {
             "label": "build-windows",
             "type": "shell",
-            "command": "x86_64-w64-mingw32-gcc src/*.c -o ../bin/executable"
+            "command": "./build.sh make windows"
         },
         {
             "label": "run-windows",
             "type": "process",
-            "command": "../bin/executable.exe"
+            "command": "./bin/windows/executable.exe"
         },
         {
             "label": "build-and-run-windows",
