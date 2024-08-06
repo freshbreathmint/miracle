@@ -1,49 +1,47 @@
 # Overview
 
-This documentation outlines the requirements, and current configuration of the Miracle Framework build system.
+This documentation outlines the requirements and current configuration of the Miracle Framework build system.
 
-The Miracle Framework build system is designed to streamline the development process by providing an efficient and flexible system for compiling and running projects across different platforms.
-
-The current build system utilizes Visual Studio Code tasks invoking simple bash commands for the selected platform's appropriate compilers, with future plans to transition to a more complex system. 
+The Miracle Framework build system is designed to streamline the development process by providing an efficient and flexible system for compiling and running projects across various platforms. It utilizes a combination of Visual Studio Tasks and a build script, `build.sh`, which invokes CMake to generate platform-specific build files and executables using the correct toolchains.
 
 ## Requirements
 
 To start and build a project using the Miracle Framework, ensure you have the following:
 
-- **Linux Environment**: Either native Linux or Windows Subsystem for Linux (WSL).
+- **Linux Environment**: 
+	- Either native Linux or Windows Subsystem for Linux (WSL).
 - **Visual Studio Code**:
     - Install and enable the recommended extensions for Miracle Framework.
 - **Compilers**:
     - `gcc` for Linux builds.
     - `x86_64-w64-mingw32-gcc` for Windows builds.
+- **CMake**:
+	- Version 3.30 or higher.
 
 ## Details
 
-The build system is currently implemented using several VS Code tasks, with status bar buttons to compile and run versions for both Linux and Windows.
+The build system is currently implemented on the user level using several tasks, with status bar buttons to compile and run versions for both Linux and Windows, as well as to clean the build files.
 
-Both the Linux and Windows build tasks use simple bash commands to invoke the respective compilers, compiling all source files in the `/src` folder and outputting the executable to the `/bin` folder.
+The `build.sh` script facilitates generating build directories and passing the correct arguments to CMake for platform-specific build files and toolchains. It also handles cleaning the build and bin directories.
 
-Compilers Used:
-- **Linux**: `gcc`
-- **Windows**: `x86_64-w64-mingw32-gcc`
+### Build Script Overview
 
-In the future, we plan to transition to a build system utilizing makefiles or CMake. This new system will accommodate the Miracle Framework as a submodule embedded within other projects.
+The `build.sh` script operates with two primary arguments: the action to be performed (`make` or `clean`) and the target platform (`native` or `windows`).
 
-Currently, the build system supports native Linux users or Windows Subsystem for Linux (WSL) users. To build for both Windows and Linux, it is recommended to use WSL.
+#### Usage:
 
-### Key Challenges
+- **Clean Directories:** Removes build folders and files (`/bin` & `/build`).
+```sh
+./build.sh clean
+```
 
-1. **Hot Reloading:**
-   - Hot Reloading, when implemented, should function correctly when running a Windows build natively, even if it is not as critical.
-   - This should not be an issue for Linux builds.
+- **Build Project**: Generates build files and compiles the project for the specified platform.
+```sh
+./build.sh make [platform]
+```
 
-### Planned Improvements
+## Future Plans
 
-1. **Clean Task**
-   - Add a task to clean the `/bin` folder.
+The build system will be expanded to support building the application and engine libraries, as well as planned features such as hot reloading and profiling (enabling/disabling them pre-runtime during the build phase). Depending on the development of the profiling feature, it may support compiling both statically and dynamically linked versions of the executable.
 
-## Unorganized Ideas
-
-1. The build system should facilitate application development.
-   - Setting up a new project using Miracle Framework should be straightforward and minimally cumbersome.
-   - Should be as simple as adding a git submodule to the Application's project files.
+For more information, please reference the [Roadmap](Roadmap.md).

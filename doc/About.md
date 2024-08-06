@@ -1,6 +1,6 @@
 # Miracle Framework
 
-*"It's a miracle that I've worked on it at all!"*
+*"It's a miracle that I'm actually still working on this!"*
 
 ## Overview
 
@@ -20,14 +20,23 @@ In the future, the engine element of the framework will include components like 
 
 The framework aims to allow applications to specify required engine components at startup, such as a rendering backend and window management, while excluding unnecessary elements. This flexibility aims to ensure that both the engine and the application can be modified, recompiled, and hot reloaded while maintaining state.
 
-## Key Planned Features
+## Usage
+
+To get started with the Miracle Framework, add the repository as a submodule to your project, then run the internal `setup-workspace.sh` script to set up your workspace.
+
+For more information about setting up the application, please reference [Application Setup](Application%20Setup.md). 
+For information about the build process, please reference [Build System](Build%20System.md).
+
+## Future Plans
+
+### Key Planned Features
 
 The development of Miracle Framework is currently centered on two key features:
 
 - **Full Profiling:** Comprehensive performance analysis tools to monitor CPU and memory usage, provide function call analysis, and track resource utilization. 
 - **Hot Library Loading:** Support for dynamic library loading during runtime, while maintaining application state.
 
-## 1.0.0 Goals
+### 1.0.0 Goals
 
 The following are the goals for Version 1.0.0 of the Miracle Framework
 
