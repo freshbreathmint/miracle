@@ -3,7 +3,14 @@
 ## IN DEVELOPMENT
 
 Changes:
-    - Reconfigured Framework to work based on an external application folder.
+    - N/A
+
+## Version 0.2.0
+
+Changes:
+    - Reconfigured Framework to work based on an external application project folder.
+    - Build system now uses CMake and a build script instead of basic tasks.
+    - Added a script to set up the application project folder for the user.
 
 ## Version 0.1.0
 
