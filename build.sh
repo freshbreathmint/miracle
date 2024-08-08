@@ -5,6 +5,7 @@ echo "Running build script..."
 # Variables
 ACTION=$1
 PLATFORM=$2
+DEBUG=$3
 
 # Function to clean build and bin directories
 clean() {
@@ -23,14 +24,22 @@ make() {
     
     # Create build directory if it doesn't already exist
     mkdir -p build/$PLATFORM
+
+    # Set build type to Debug if DEBUG is specified as 'debug'
+    if [ "$DEBUG" == "debug" ]; then
+        echo "Debug build enabled."
+        BUILD_TYPE="-DCMAKE_BUILD_TYPE=Debug"
+    else
+        BUILD_TYPE=""
+    fi
     
     # Generate build files for the specified platform
     case $PLATFORM in
         windows)
-            cmake -B build/$PLATFORM -DCMAKE_TOOLCHAIN_FILE=windows.cmake -DPLATFORM=$PLATFORM
+            cmake -B build/$PLATFORM -DCMAKE_TOOLCHAIN_FILE=windows.cmake -DPLATFORM=$PLATFORM $BUILD_TYPE
             ;;
         native)
-            cmake -B build/$PLATFORM -DPLATFORM=$PLATFORM
+            cmake -B build/$PLATFORM -DPLATFORM=$PLATFORM $BUILD_TYPE
             ;;
         *)
             echo "Error: Unsupported platform specified. Please specify [native|windows]."
