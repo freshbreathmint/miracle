@@ -13,7 +13,7 @@
         {
             "label": "build-linux",
             "type": "shell",
-            "command": "./build.sh make native"
+            "command": "./build.sh make native debug"
         },
         {
             "label": "run-linux",
@@ -29,7 +29,7 @@
         {
             "label": "build-windows",
             "type": "shell",
-            "command": "./build.sh make windows"
+            "command": "./build.sh make windows debug"
         },
         {
             "label": "run-windows",
@@ -40,6 +40,18 @@
             "label": "build-and-run-windows",
             "dependsOrder": "sequence",
             "dependsOn": ["build-windows", "run-windows"]
+        },
+        // Debug Task
+        {
+            "label": "valgrind-gdbserver-native",
+            "type": "shell",
+            "command": "valgrind",
+            "args": [
+                "--vgdb=full", // Enable GDB server in Valgrind. ('full' gives accuracy, at the cost of performance.)
+                "--vgdb-error=0",
+                "bin/native/executable",
+            ],
+            "isBackground": true,
         },
     ]
 }

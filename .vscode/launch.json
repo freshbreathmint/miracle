@@ -18,7 +18,13 @@
                     "text": "-enable-pretty-printing",
                     "ignoreFailures": true
                 },
+                {
+                    "description": "Attach to Valgrind",
+                    "text": "target remote | vgdb",
+                    "ignoreFailures": true,
+                }
             ],
+            "preLaunchTask": "valgrind-gdbserver-native"
         }
     ]
 }
