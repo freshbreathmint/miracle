@@ -41,17 +41,22 @@
             "dependsOrder": "sequence",
             "dependsOn": ["build-windows", "run-windows"]
         },
-        // Debug Task
+        // Valgrind GDB Server Tasks
         {
-            "label": "valgrind-gdbserver-native",
+            "label": "valgrind",
             "type": "shell",
             "command": "valgrind",
             "args": [
-                "--vgdb=full", // Enable GDB server in Valgrind. ('full' gives accuracy, at the cost of performance.)
                 "--vgdb-error=0",
+                "--vgdb=full", // Enable GDB server in Valgrind. ('full' gives accuracy, at the cost of performance.)
                 "bin/native/executable",
             ],
             "isBackground": true,
         },
+        {
+            "label": "valgrind-cleanup",
+            "type": "shell",
+            "command": "kill -9 $(pgrep -f valgrind)"
+        }
     ]
 }

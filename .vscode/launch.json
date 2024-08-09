@@ -2,7 +2,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "(Native) GDB",
+            "name": "GDB [Native] ",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/bin/native/executable",
@@ -24,7 +24,8 @@
                     "ignoreFailures": true,
                 }
             ],
-            "preLaunchTask": "valgrind-gdbserver-native"
+            "preLaunchTask": "valgrind",
+            "postDebugTask": "valgrind-cleanup",
         }
     ]
 }
