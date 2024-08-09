@@ -17,8 +17,8 @@
         },
         {
             "label": "run-linux",
-            "type": "process",
-            "command": "./bin/native/executable"
+            "type": "shell",
+            "command": "./run.sh bin/native/executable"
         },
         {
             "label": "build-and-run-linux",
@@ -33,8 +33,8 @@
         },
         {
             "label": "run-windows",
-            "type": "process",
-            "command": "./bin/windows/executable.exe"
+            "type": "shell",
+            "command": "./run.sh bin/windows/executable.exe" //TODO: Run natively, not through bash.
         },
         {
             "label": "build-and-run-windows",
@@ -45,12 +45,7 @@
         {
             "label": "valgrind",
             "type": "shell",
-            "command": "valgrind",
-            "args": [
-                "--vgdb-error=0",
-                "--vgdb=full", // Enable GDB server in Valgrind. ('full' gives accuracy, at the cost of performance.)
-                "bin/native/executable",
-            ],
+            "command": "./run.sh valgrind --vgdb-error=0 --vgdb=full bin/native/executable",
             "isBackground": true,
         },
         {
