@@ -3,7 +3,8 @@
 ## IN DEVELOPMENT
 
 Changes:
-    - N/A
+    - Executable now launches in new external terminal window.
+    - Added GDB + Valgrind debugging.
 
 ## Version 0.2.0
 
