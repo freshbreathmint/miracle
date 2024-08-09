@@ -63,7 +63,7 @@
 	},
 	"extensions": {
 		"recommendations": [
-			"ms-vscode.cmake-tools",
+			"gruntfuggly.todo-tree",
 			"ms-vscode.cpptools",
 			"spencerwmiles.vscode-task-buttons",
 			"twxs.cmake",

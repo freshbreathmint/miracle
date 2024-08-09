@@ -34,7 +34,7 @@
         {
             "label": "run-windows",
             "type": "shell",
-            "command": "./run.sh bin/windows/executable.exe" //TODO: Run natively, not through bash.
+            "command": "./run.sh bin/windows/executable.exe"
         },
         {
             "label": "build-and-run-windows",
