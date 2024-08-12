@@ -9,11 +9,9 @@ fi
 # The command to run in the new terminal window
 COMMAND="$@"
 
-# TODO: Add a flag to run natively in wt.exe so we aren't going through bash for windows executables.
-
 # Detect the terminal and open a new window
 if command -v wt.exe >/dev/null 2>&1; then                  # WSL
-    wt.exe bash -c "$COMMAND"
+    wt.exe bash -c "$COMMAND" # There is a noticable delay when starting a windows executable, unfortunately. This seems to be unavoidable.
 elif command -v gnome-terminal >/dev/null 2>&1; then        # GNOME
     gnome-terminal -- bash -c "$COMMAND; exec bash"
 elif command -v konsole >/dev/null 2>&1; then               # KDE
