@@ -6,12 +6,13 @@ int main()
     clock_t start_time, end_time;
     double time_spent;
 
-    long long int num_iterations = 1000000000;
+    long long int num_iterations = 10000;
     double x = 1.5;
 
     int counting = 0;
     while (counting <= 100){
         counting++;
+        printf("FINDME\n");
     }
 
     start_time = clock();

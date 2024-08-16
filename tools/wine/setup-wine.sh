@@ -24,7 +24,7 @@ echo "Wine 64-bit configured and built with $CORES core(s)."
 
 # Configure and build the 32-bit version
 cd ../wine32
-PKG_CONFIG_PATH=/usr/lib/pkgconfig ../../winesrc/configure CFLAGS="-march=native -Og -fno-inline -fno-omit-frame-pointer -fno-optimize-sibling-calls -pipe -fstack-protector-strong" --with-wine64=../wine64
+PKG_CONFIG_PATH=/usr/lib/pkgconfig ../../winesrc/configure CFLAGS="-Og -fno-inline -fno-omit-frame-pointer -fno-optimize-sibling-calls -pipe" --with-wine64=../wine64
 make -j$CORES
 
 echo "Wine 32-bit configured and built with $CORES core(s)."
