@@ -6,7 +6,12 @@ project(executable)
 # Set output directory based on build type.
 if (DEFINED PLATFORM)
     message("Building for platform '${PLATFORM}'.")
-    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin/${PLATFORM})
+    
+    if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+        set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin/${PLATFORM}/debug)
+    else()
+        set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin/${PLATFORM}/release)
+    endif()
 endif()
 
 # Make executable with temporary source list.

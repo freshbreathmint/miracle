@@ -30,7 +30,7 @@ make() {
         echo "Debug build enabled."
         BUILD_TYPE="-DCMAKE_BUILD_TYPE=Debug"
     else
-        BUILD_TYPE=""
+        BUILD_TYPE="-DCMAKE_BUILD_TYPE=Release"
     fi
     
     # Generate build files for the specified platform

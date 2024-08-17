@@ -16,9 +16,14 @@
             "command": "./build.sh make native debug"
         },
         {
+            "label": "build-linux-release",
+            "type": "shell",
+            "command": "./build.sh make native"
+        },
+        {
             "label": "run-linux",
             "type": "shell",
-            "command": "./run.sh bin/native/executable"
+            "command": "./run.sh bin/native/debug/executable"
         },
         {
             "label": "build-and-run-linux",
@@ -32,14 +37,25 @@
             "command": "./build.sh make windows debug"
         },
         {
+            "label": "build-windows-release",
+            "type": "shell",
+            "command": "./build.sh make windows"
+        },
+        {
             "label": "run-windows",
             "type": "shell",
-            "command": "./run.sh bin/windows/executable.exe"
+            "command": "./run.sh bin/windows/debug/executable.exe"
         },
         {
             "label": "build-and-run-windows",
             "dependsOrder": "sequence",
             "dependsOn": ["build-windows", "run-windows"]
+        },
+        // Generate Release Builds
+        {
+            "label": "generate-release-builds",
+            "dependsOrder": "sequence",
+            "dependsOn": ["build-windows-release", "build-linux-release"]
         },
         // Valgrind GDB Server Tasks
         {

@@ -4,7 +4,8 @@
 
 Changes:
     - Executable now launches in new external terminal window.
-    - Added GDB + Valgrind debugging.
+    - Added GDB + Valgrind debugging for linux builds (windows debuggers are on their own for now)
+    - Added "Generate Release Builds" task
 
 ## Version 0.2.0
 

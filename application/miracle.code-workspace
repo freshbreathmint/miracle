@@ -16,8 +16,17 @@
 		"VsCodeTaskButtons.showCounter": false,
 		"VsCodeTaskButtons.tasks": [
 			{
-				"label": "$(terminal-kill) Clean",
-				"task": "clean",
+				"label": "$(issue-closed) Tasks",
+				"tasks": [
+					{
+						"label": "$(key) Generate Release Builds",
+						"task": "generate-release-builds",
+					},
+					{
+						"label": "$(terminal-kill) Clean",
+						"task": "clean",
+					},
+				]
 			},
 			{
 				"label": "$(terminal-linux) Linux",
