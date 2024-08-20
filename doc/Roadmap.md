@@ -21,4 +21,4 @@ This document serves as a roadmap for the tasks that need to be completed during
 
 ## Timeframe
 
-Ideally version 1.0.0 should be complete by the end of August 2024.
+Ideally version 1.0.0 should be complete by the end of September 2024.

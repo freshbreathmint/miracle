@@ -1,24 +1,26 @@
 # Miracle Framework
 
-*"It's a miracle that I'm actually still working on this!"*
+*"It's a miracle that anything I made here works!"*
 
 ## Overview
 
-Miracle Framework is an in-development software framework aimed at providing essential tools universally useful for developing applications. The motivation behind developing this software is to ease the process of designing and deploying software applications for myself and others.
+Miracle Framework is an evolving software framework designed to offer a comprehensive set of tools for application development. The primary goal of this framework is to simplify the process of designing, building, and deploying software, making it accessible and efficient for both myself and other developers.
+
+At its current stage, Miracle Framework operates as an advanced build system. It streamlines the setup process, allowing users to quickly establish a working environment. This means developers can focus more on writing code and less on the often cumbersome tasks of configuring build systems and other initial setup procedures.
+
+Looking ahead, the framework is planned to be expanded with capabilities for creating applications as dynamically loadable libraries. This system will allow not only the core application libraries but also additional dependencies to be loaded on demand, offering enhanced modularity and flexibility. As more tools and features are incorporated, Miracle Framework will hopefully evolve into a robust and versatile platform, tailored for comprehensive software development.
 
 ## Design Philosophy
 
-Miracle Framework is coded entirely in C, using minimal dependencies and libraries, except where necessary or most efficient, such as interfacing with proprietary hardware. This approach enables a deep understanding of the framework's inner workings for developers and promotes a lightweight and efficient codebase.
+Miracle Framework is being developed entirely in C, with a focus on minimizing dependencies and external libraries. Dependencies are only included when absolutely necessary or when they offer significant efficiency, such as in cases involving proprietary hardware. This design choice enables developers to gain a deep understanding of the framework’s core functionality quickly, while also maintaining a lightweight and efficient codebase.
 
-The framework is planned to be built around a modular architecture, comprising three main components:
+The framework is being built around a modular architecture, with three primary components:
 
-- **Miracle Framework**: Acting as the executable portion, the framework will provide the necessary infrastructure for library loading, profiling, and other shared functionalities between the engine and the application.
-- **Sage Engine:** Essentially a modular state machine that can be customized and initialized by the application according to it's requirements.
-- **Application:** Provided externally, this library will represent the actual software utilizing the framework.
+- **Miracle Framework**: Serving as the core executable, this component provides the essential infrastructure for tasks such as library loading, profiling, and other shared functionalities between the engine and the application.
+- **Sage Engine:** A large extension of the Miracle Framework, the Sage Engine will be designed to include shared features necessary for more complex programs. It will expand the framework's capabilities and provides a richer set of tools for developers building sophisticated applications.
+- **Application:** This component is provided externally and represents the actual software that utilizes the Miracle Framework. The framework will manage the setup of the Sage Engine according to the Application's specifications.
 
-In the future, the engine element of the framework will include components like a rendering backend, window management, input handling, and event systems. However, the current focus is on developing the core framework functionality and enabling application loading through the framework. This phased approach ensures a focused and manageable development process.
-
-The framework aims to allow applications to specify required engine components at startup, such as a rendering backend and window management, while excluding unnecessary elements. This flexibility aims to ensure that both the engine and the application can be modified, recompiled, and hot reloaded while maintaining state.
+The purpose of this approach is to maximize the amount of features that can be dynamically reloaded at runtime without losing state. 
 
 ## Usage
 
@@ -26,6 +28,7 @@ To get started with the Miracle Framework, add the repository as a submodule to 
 
 For more information about setting up the application, please reference [Application Setup](Application%20Setup.md). 
 For information about the build process, please reference [Build System](Build%20System.md).
+For information about debugging, please reference [Debugging](Debugging).
 
 ## Future Plans
 
@@ -33,7 +36,7 @@ For information about the build process, please reference [Build System](Build%2
 
 The development of Miracle Framework is currently centered on two key features:
 
-- **Full Profiling:** Comprehensive performance analysis tools to monitor CPU and memory usage, provide function call analysis, and track resource utilization. 
+- **Profiling Tools:** Comprehensive performance analysis tools to monitor CPU and memory usage, provide function call analysis, and track resource utilization. 
 - **Hot Library Loading:** Support for dynamic library loading during runtime, while maintaining application state.
 
 ### 1.0.0 Goals
