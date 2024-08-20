@@ -2,6 +2,8 @@
 
 ## IN DEVELOPMENT
 
+## Version 0.3.0
+
 Changes:
     - Executable now launches in new external terminal window when using run tasks.
     - Test build now measures prints/floating point operations and times them.
@@ -9,6 +11,7 @@ Changes:
     - Added new task: Generate Release Builds
     - Added GDB Debugging for Linux (Currently semi-broken.)
     - Added GDB + Valgrind Debugging for Linux (Not broken!)
+    - Added setup file for Windows.
 
 ## Version 0.2.0
 
