@@ -18,7 +18,7 @@ clean() {
 make() {
     # Check if platform variable was specified
     if [ -z "$PLATFORM" ]; then
-        echo "Error: No platform specified. Please specify a platform such as [native|windows]."
+        echo "Error: No platform specified. Please specify a platform such as [linux|windows]."
         exit 1
     fi
     
@@ -38,11 +38,11 @@ make() {
         windows)
             cmake -B build/$PLATFORM -DCMAKE_TOOLCHAIN_FILE=windows.cmake -DPLATFORM=$PLATFORM $BUILD_TYPE
             ;;
-        native)
+        linux)
             cmake -B build/$PLATFORM -DPLATFORM=$PLATFORM $BUILD_TYPE
             ;;
         *)
-            echo "Error: Unsupported platform specified. Please specify [native|windows]."
+            echo "Error: Unsupported platform specified. Please specify [linux|windows]."
             exit 1
             ;;
     esac

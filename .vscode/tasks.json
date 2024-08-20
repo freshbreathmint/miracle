@@ -12,17 +12,17 @@
         {
             "label": "l-build-linux",
             "type": "shell",
-            "command": "./build.sh make native debug"
+            "command": "./build.sh make linux debug"
         },
         {
             "label": "l-build-linux-release",
             "type": "shell",
-            "command": "./build.sh make native"
+            "command": "./build.sh make linux"
         },
         {
             "label": "l-run-linux",
             "type": "shell",
-            "command": "./run.sh bin/native/debug/executable"
+            "command": "./run.sh bin/linux/debug/executable"
         },
         {
             "label": "l-build-and-run-linux",
@@ -58,7 +58,7 @@
         {
             "label": "valgrind",
             "type": "shell",
-            "command": "./run.sh valgrind --vgdb-error=0 --vgdb=full bin/native/debug/executable",
+            "command": "./run.sh valgrind --vgdb-error=0 --vgdb=full bin/linux/debug/executable",
             "isBackground": true,
         },
         {
