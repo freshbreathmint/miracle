@@ -2,15 +2,36 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "GDB",
+            "name": "[LINUX] GDB",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/bin/native/executable",
+            "program": "${workspaceFolder}/bin/native/debug/executable",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${fileDirname}",
+            "environment": [],
+            "externalConsole": false, // We don't use external console, because it doesn't currently work with WSL.
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+        {
+            "name": "[LINUX] GDB + Valgrind",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/bin/native/debug/executable",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
-            "externalConsole": false,
+            "externalConsole": false, 
+            // This doesn't matter because the GDB server is started by Valgrind, but can cause issues if there are multiple valgrind instances. 
+            // Hence the valgrind-cleanup task.
             "MIMode": "gdb",
             "setupCommands": [
                 {
@@ -26,6 +47,6 @@
             ],
             "preLaunchTask": "valgrind",
             "postDebugTask": "valgrind-cleanup",
-        }
+        },
     ]
 }

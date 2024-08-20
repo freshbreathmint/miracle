@@ -3,65 +3,62 @@
     // for the documentation about the tasks.json format
     "version": "2.0.0",
     "tasks": [
-        // Clean build files
+        // Linux Tasks
         {
-            "label": "clean",
+            "label": "l-clean",
             "type": "shell",
             "command": "./build.sh clean"
         },
-        // Linux Build Tasks
         {
-            "label": "build-linux",
+            "label": "l-build-linux",
             "type": "shell",
             "command": "./build.sh make native debug"
         },
         {
-            "label": "build-linux-release",
+            "label": "l-build-linux-release",
             "type": "shell",
             "command": "./build.sh make native"
         },
         {
-            "label": "run-linux",
+            "label": "l-run-linux",
             "type": "shell",
             "command": "./run.sh bin/native/debug/executable"
         },
         {
-            "label": "build-and-run-linux",
+            "label": "l-build-and-run-linux",
             "dependsOrder": "sequence",
-            "dependsOn": ["build-linux", "run-linux"]
+            "dependsOn": ["l-build-linux", "l-run-linux"]
         },
-        // Windows Build Tasks
         {
-            "label": "build-windows",
+            "label": "l-build-windows",
             "type": "shell",
             "command": "./build.sh make windows debug"
         },
         {
-            "label": "build-windows-release",
+            "label": "l-build-windows-release",
             "type": "shell",
             "command": "./build.sh make windows"
         },
         {
-            "label": "run-windows",
+            "label": "l-run-windows",
             "type": "shell",
             "command": "./run.sh bin/windows/debug/executable.exe"
         },
         {
-            "label": "build-and-run-windows",
+            "label": "l-build-and-run-windows",
             "dependsOrder": "sequence",
-            "dependsOn": ["build-windows", "run-windows"]
+            "dependsOn": ["l-build-windows", "l-run-windows"]
         },
-        // Generate Release Builds
         {
-            "label": "generate-release-builds",
+            "label": "l-generate-release-builds",
             "dependsOrder": "sequence",
-            "dependsOn": ["build-windows-release", "build-linux-release"]
+            "dependsOn": ["l-build-windows-release", "l-build-linux-release"]
         },
         // Valgrind GDB Server Tasks
         {
             "label": "valgrind",
             "type": "shell",
-            "command": "./run.sh valgrind --vgdb-error=0 --vgdb=full bin/native/executable",
+            "command": "./run.sh valgrind --vgdb-error=0 --vgdb=full bin/native/debug/executable",
             "isBackground": true,
         },
         {

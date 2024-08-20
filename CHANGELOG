@@ -3,9 +3,12 @@
 ## IN DEVELOPMENT
 
 Changes:
-    - Executable now launches in new external terminal window.
-    - Added GDB + Valgrind debugging for linux builds (windows debuggers are on their own for now)
-    - Added "Generate Release Builds" task
+    - Executable now launches in new external terminal window when using run tasks.
+    - Test build now measures prints/floating point operations and times them.
+    - Old tasks now reorganized under Linux/WSL Tasks.
+    - Added new task: Generate Release Builds
+    - Added GDB Debugging for Linux (Currently semi-broken.)
+    - Added GDB + Valgrind Debugging for Linux (Not broken!)
 
 ## Version 0.2.0
 
