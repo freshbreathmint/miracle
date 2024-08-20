@@ -60,26 +60,6 @@
 					},
 				]
 			},
-			{
-				"label": "$(terminal-cmd)  Windows Tasks",
-				"tasks": [
-					{
-						"label": "$(wrench) Build \"Windows\"",
-						"task": "build-windows",
-						"description": "Build the executable for \"Windows\" systems."
-					},
-					{
-						"label": "$(notebook-execute) Run \"Windows\"",
-						"task": "run-windows",
-						"description": "Run the \"Windows\" version of the executable."
-					},
-					{
-						"label": "$(notebook-execute-all) Build & Run \"Windows\"",
-						"task": "build-and-run-windows",
-						"description": "Build & Run the \"Windows\" version of the executable."
-					}
-				]
-			},
 		],
 	},
 	"extensions": {
