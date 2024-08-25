@@ -9,17 +9,23 @@ if (DEFINED PLATFORM)
     
     if (CMAKE_BUILD_TYPE STREQUAL "Debug")
         set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin/${PLATFORM}/debug)
+        set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin/${PLATFORM}/debug)
     else()
         set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin/${PLATFORM}/release)
+        set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin/${PLATFORM}/release)
     endif()
 endif()
 
 # Make the application library with temporary source list
-add_library(application STATIC ../src/library.c)
+# add_library(application STATIC ../src/library.c)
+# target_include_directories(application PUBLIC ../src)
+
+# Make the shared application library with temporary source list
+add_library(application SHARED ../src/library.c)
 target_include_directories(application PUBLIC ../src)
 
 # Make executable with temporary source list.
 add_executable(${PROJECT_NAME} src/main.c)
 
 # Link the application to the executable
-target_link_libraries(${PROJECT_NAME} application)
+#target_link_libraries(${PROJECT_NAME} application)
