@@ -21,11 +21,16 @@ endif()
 # target_include_directories(application PUBLIC ../src)
 
 # Make the shared application library with temporary source list
-add_library(application SHARED ../src/library.c)
+add_library(application SHARED ../src/app.c)
 target_include_directories(application PUBLIC ../include)
 
 # Make executable with temporary source list.
-add_executable(${PROJECT_NAME} src/main.c src/platform/windows.c src/platform/linux.c)
+add_executable(${PROJECT_NAME} 
+    src/main.c
+    src/containers/dynamic_array.c 
+    src/platform/windows.c 
+    src/platform/linux.c
+)
 target_include_directories(${PROJECT_NAME} PUBLIC include)
 
 # Link the application to the executable
