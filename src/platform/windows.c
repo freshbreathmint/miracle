@@ -21,9 +21,9 @@ void* open_library(const char* lib_name) {
     return handle;
 }
 
-int (*get_function_pointer(void* handle, const char* func_name))() {
+void (*get_function_pointer(void* handle, const char* func_name))() {
     // Get the function pointer
-    int (*function_ptr)() = (int (*)())GetProcAddress((HMODULE)handle, func_name);
+    void (*function_ptr)() = (void (*)())GetProcAddress((HMODULE)handle, func_name);
 
     // Check for errors
     if (!function_ptr) {
@@ -40,4 +40,4 @@ void close_library(void* handle) {
     }
 }
 
-#endif
+#endif //PLATFORM_WINDOWS

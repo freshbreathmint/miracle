@@ -25,7 +25,7 @@ void* open_library(const char* lib_name) {
     snprintf(lib_path, sizeof(lib_path), "%s/%s.so", dir, lib_name);
 
     // Load the library
-    void* handle = dlopen(lib_path, RTLD_LAZY);
+    void* handle = dlopen(lib_path, RTLD_NOW | RTLD_GLOBAL);
     if (!handle) {
         fprintf(stderr, "Error loading library: %s\n", dlerror());
         return NULL;
@@ -34,9 +34,9 @@ void* open_library(const char* lib_name) {
     return handle;
 }
 
-int (*get_function_pointer(void* handle, const char* func_name))() {
+void (*get_function_pointer(void* handle, const char* func_name))() {
     // Get the function pointer
-    int (*function_ptr)() = dlsym(handle, func_name);
+    void (*function_ptr)() = dlsym(handle, func_name);
    
     // Check for errors
     char* error = dlerror();
@@ -54,4 +54,4 @@ void close_library(void* handle) {
     }
 }
 
-#endif
+#endif //PLATFORM_LINUX
