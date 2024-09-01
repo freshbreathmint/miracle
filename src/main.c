@@ -1,31 +1,21 @@
-#include "platform/platform.h"
+#include <stdbool.h>
 #include <stdio.h>
+
+bool running = false;
 
 int main()
 {
-    // Open the application library
-    void* handle = open_library("libapplication");
-    if(!handle) {
-        return 1;
-    }
+    running = true;
 
-    // Get the function pointer
-    int (*function_ptr)() = get_function_pointer(handle, "measure_flops");
-    if (!function_ptr) {
-        close_library(handle);
-        return 1;
+    // Main Loop
+    int cycle = 0;
+    while(running){
+        cycle++;
+        printf("Cycle: %i\n", cycle);
+        if(cycle == 100000){
+            running = false;
+        }
     }
-
-    // Run Loop
-    int loops = 0;
-    while(loops < 5){
-        int flops = function_ptr();
-        printf("FLOPS: %i\n", flops);
-        loops++;
-    }
-
-    // Close Library
-    close_library(handle);
 
     // Exit
     return 0;
