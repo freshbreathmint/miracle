@@ -25,7 +25,7 @@ void* open_library(const char* lib_name) {
     snprintf(lib_path, sizeof(lib_path), "%s/%s.so", dir, lib_name);
 
     // Load the library
-    void* handle = dlopen(lib_path, RTLD_NOW | RTLD_GLOBAL);
+    void* handle = dlopen(lib_path, RTLD_NOW);
     if (!handle) {
         fprintf(stderr, "Error loading library: %s\n", dlerror());
         return NULL;
