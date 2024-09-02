@@ -26,6 +26,7 @@ target_include_directories(application PUBLIC ../include)
 
 # Make executable with temporary source list.
 add_executable(${PROJECT_NAME} 
+    src/library.c
     src/main.c
     src/containers/dynamic_array.c 
     src/platform/windows.c 
