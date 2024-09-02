@@ -64,4 +64,99 @@ void* dynamic_array_resize(void* array){
     return new_array;
 }
 
-//TODO: Rest of the array functions
+void* dynamic_array_push(void* array, const void* value_ptr){
+    // Get the header values.
+    size_t capacity = array_capacity(array);
+    size_t length = array_length(array);
+    size_t stride = array_stride(array);
+
+    // Resize array if needed.
+    if(length >= capacity){
+        array = array_resize(typeof(array), array);
+    }
+
+    // Find a place for the new element
+    size_t address = (size_t)array;
+    address += (length * stride);
+
+    // Copy the new element into the array and update the length.
+    memcpy((void*)address, value_ptr, stride);
+    array_set_length(array, length + 1);
+
+    // Return the modified array.
+    return array;
+}
+
+void dynamic_array_pop(void* array, void* dest){
+    // Get the header values.
+    size_t length = array_length(array);
+    size_t stride = array_stride(array);
+
+    // Get the location of the last element.
+    size_t address = (size_t)array;
+    address += ((length -1) * stride);
+
+    // Copy the last element to the destination and decrement the length.
+    memcpy(dest, (void*)address, stride);
+    array_set_length(array, length - 1);
+}
+
+void* dynamic_array_pop_at(void* array, size_t index, void* dest){
+    // Get the header values.
+    size_t length = array_length(array);
+    size_t stride = array_stride(array);
+
+    // Check if the index is out of bounds.
+    if(index >= length){
+        //TODO: Some sort of error message
+        return array; // Return the array, unmodified.
+    }
+
+    // Get the location of the index and copy the element into the destination buffer.
+    size_t address = (size_t)array;
+    memcpy(dest, (void*)(address + (index * stride)), stride);
+
+    // If we weren't targeting the last element, snip out the entry and copy the rest inward.
+    if(index != length - 1){
+        memcpy(
+            (void*)(address + (index * stride)),        // Address of the element being removed.
+            (void*)(address + ((index +1) * stride)),   // Address of the element immediately following.
+            stride * (length - index - 1));             // Total number of bytes to copy.
+    }
+
+    // Decrement the length and return the array.
+    array_set_length(array, length - 1);
+    return array;
+}
+
+void* dynamic_array_insert_at(void* array, size_t index, void* element){
+    // Get the header values.
+    size_t capacity = array_capacity(array);
+    size_t length = array_length(array);
+    size_t stride = array_stride(array);
+
+    // Check if the index is out of bounds.
+    if(index >= length){
+        //TODO: Some sort of error message
+        return array; // Return the array, unmodified.
+    }
+
+    // Resize the array if it's already full.
+    if(length >= capacity){
+        array = array_resize(typeof(array), array);
+    }
+
+    // Get the address and push elements from index forward out by one.
+    size_t address = (size_t)array;
+    memcpy(
+            (void*)(address + ((index + 1) * stride)),  // Address right after the index, insertion point. 
+            (void*)(address + (index * stride)),        // Index address
+            stride * (length - index));                 // Number of elements to be shifted.
+    
+    // Set the value at the index.
+    memcpy((void*)(address + (index * stride)), element, stride);
+
+    // Increase the length and return the array.
+    array_set_length(array, length + 1);
+    return array;
+}
