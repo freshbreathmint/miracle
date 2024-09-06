@@ -19,8 +19,10 @@ Library* load_library(const char* lib_name){
 
     if(lib.handle){
         libraries = array_push(Library, libraries, &lib);
+        return &libraries[array_length(libraries) - 1];
     } else {
         printf("Failed to load library: %s\n", lib_name);
+        return NULL;
     }
 }
 

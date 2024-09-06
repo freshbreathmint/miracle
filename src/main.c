@@ -21,10 +21,13 @@ int main()
 
     // We can load the library dynamically into an array of libraries
     Library* app_lib = load_library("libapplication");
+    Library* engine_lib = load_library("libengine");
 
     // we get the function pointer manually for now
-    void (*run)() = (void (*)())get_function_pointer(app_lib->handle, "run");
-    run();
+    void (*runapp)() = (void (*)())get_function_pointer(app_lib->handle, "run");
+    void (*runengine)() = (void (*)())get_function_pointer(engine_lib->handle, "run");
+    runapp();
+    runengine();
 
     // All libs get unloaded.
     unload_libraries();
