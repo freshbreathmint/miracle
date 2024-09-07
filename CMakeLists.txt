@@ -30,7 +30,7 @@ target_include_directories(application PUBLIC ../include)
 target_link_libraries(application miracle)
 
 # Make the shared engine library with temporary source list
-add_library(engine SHARED engine/engine.c)
+add_library(engine SHARED engine/src/engine.c)
 target_include_directories(engine PUBLIC engine/include)
 target_link_libraries(engine miracle)
 
