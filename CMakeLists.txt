@@ -36,12 +36,12 @@ target_link_libraries(engine miracle)
 
 # Make executable with temporary source list.
 add_executable(${PROJECT_NAME} 
-    src/library.c
-    src/main.c
-    src/platform/windows.c 
-    src/platform/linux.c
+    executable/src/library.c
+    executable/src/main.c
+    executable/src/platform/windows.c 
+    executable/src/platform/linux.c
 )
-target_include_directories(${PROJECT_NAME} PUBLIC include)
+target_include_directories(${PROJECT_NAME} PUBLIC executable/include)
 target_link_libraries(${PROJECT_NAME} miracle)
 
 # Link the application to the executable
