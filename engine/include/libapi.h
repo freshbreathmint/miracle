@@ -1,7 +1,6 @@
 #pragma once
 
-#include "engine.h" //for the function
-#include <stdio.h> //remove this
+#include "engine.h" //for the functions
 
 #include "containers/dynamic_array.h"
 
