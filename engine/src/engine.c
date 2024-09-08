@@ -8,9 +8,5 @@ void funcA(){
 }
 
 void funcB(){
-    printf("Engine says hello!\n");
-}
-
-void check_address(){
-    printf("Address of funcA: %p\n", (void*)funcA);
+    printf("Engine says hello again!\n");
 }
