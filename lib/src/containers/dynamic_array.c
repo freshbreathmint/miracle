@@ -76,8 +76,7 @@ void* dynamic_array_push(void* array, const void* value_ptr){
     }
 
     // Find a place for the new element
-    size_t address = (size_t)array;
-    address += (length * stride);
+    size_t address = (size_t)array + (length * stride);
 
     // Copy the new element into the array and update the length.
     memcpy((void*)address, value_ptr, stride);

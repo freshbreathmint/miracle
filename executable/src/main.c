@@ -14,7 +14,7 @@ int main()
     while(running){
         cycle++;
         printf("Cycle: %i\n", cycle);
-        if(cycle == 100000){
+        if(cycle == 1){
             running = false;
         }
     }
@@ -23,14 +23,24 @@ int main()
     Library* app_lib = load_library("libapplication");
     Library* engine_lib = load_library("libengine");
 
+    void** (*check_address)() = (void** (*)())get_function_pointer(engine_lib->handle, "check_address");
+    check_address();
+
+    printf("Address of funcA stored in engine_lib->funcs[0]: %p\n", (void*)engine_lib->funcs[0]);
+    void (*funcA)() = (void (*)())engine_lib->funcs[0];
+    funcA();
+
+    printf("Address of funcA stored in engine_lib->funcs[1]: %p\n", (void*)engine_lib->funcs[0]);
+    void (*funcB)() = (void (*)())engine_lib->funcs[1];
+    funcB();
+
     // we get the function pointer manually for now
-    void (*runapp)() = (void (*)())get_function_pointer(app_lib->handle, "run");
-    void (*runengine)() = (void (*)())get_function_pointer(engine_lib->handle, "run");
-    runapp();
-    runengine();
+    // void (*runengine)() = (void (*)())get_function_pointer(engine_lib->handle, "run");
+    // runapp();
+    // runengine();
 
     // All libs get unloaded.
-    unload_libraries();
+    unload_all_libraries();
 
     // Exit
     return 0;
