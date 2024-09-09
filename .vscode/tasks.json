@@ -54,6 +54,11 @@
             "dependsOrder": "sequence",
             "dependsOn": ["l-build-windows-release", "l-build-linux-release"]
         },
+        {
+            "label": "l-run-release",
+            "type": "shell",
+            "command": "./run.sh bin/linux/release/executable"
+        },
         // Valgrind GDB Server Tasks
         {
             "label": "valgrind",
