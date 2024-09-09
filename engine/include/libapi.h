@@ -4,7 +4,7 @@
 
 #include "containers/dynamic_array.h"
 
-void** gen_funcs(){
+void** export_funcs(){
     // Create function pointer array.
     void** funcs = array(void*);
 

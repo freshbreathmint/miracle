@@ -19,20 +19,20 @@ int main()
         }
     }
 
+    
     // We can load the library dynamically into an array of libraries
-    Library* app_lib = load_library("libapplication");
     Library* engine_lib = load_library("libengine");
+    printf("engine loaded\n");
+    Library* app_lib = load_library("libapplication");
 
-    void (*funcA)() = (void (*)())engine_lib->funcs[0];
-    funcA();
-
-    void (*funcB)() = (void (*)())engine_lib->funcs[1];
-    funcB();
+    // Import the functions
+    void (*import)(void*[]) = (void (*)(void*[]))get_function_pointer(app_lib->handle, "import_funcs");
+    import(engine_lib->funcs);
 
     // we get the function pointer manually for now
-    // void (*runengine)() = (void (*)())get_function_pointer(engine_lib->handle, "run");
-    // runapp();
-    // runengine();
+    void (*runapp)() = (void (*)())get_function_pointer(app_lib->handle, "run");
+    runapp();
+    
 
     // All libs get unloaded.
     unload_all_libraries();

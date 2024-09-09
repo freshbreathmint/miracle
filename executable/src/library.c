@@ -18,8 +18,8 @@ Library* load_library(const char* lib_name){
     lib.handle = open_library(lib_name);
 
     // Get the functions.
-    void** (*gen_funcs)() = (void** (*)())get_function_pointer(lib.handle, "gen_funcs");
-    lib.funcs = gen_funcs();
+    void** (*export_funcs)() = (void** (*)())get_function_pointer(lib.handle, "export_funcs");
+    lib.funcs = export_funcs();
 
     if(lib.handle){
         libraries = array_push(Library, libraries, &lib);
