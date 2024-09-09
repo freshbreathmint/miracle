@@ -35,7 +35,7 @@ if (LINK STREQUAL "STATIC")
     # Application Library
     add_library(application STATIC ${APPLICATION_SRC})
     target_include_directories(application PUBLIC ../include)
-    target_link_libraries(application miracle)
+    target_link_libraries(application miracle engine)
 
     # Engine Library
     add_library(engine STATIC ${ENGINE_SRC})
