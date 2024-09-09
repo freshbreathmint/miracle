@@ -16,33 +16,57 @@ if (DEFINED PLATFORM)
     endif()
 endif()
 
-# Make the application library with temporary source list
-# add_library(application STATIC ../src/library.c)
-# target_include_directories(application PUBLIC ../src)
+# Collect all file sources for each target.
+file(GLOB_RECURSE MIRACLE_LIB_SRC "lib/src/*.c")
+file(GLOB_RECURSE APPLICATION_SRC "../src/*.c")
+file(GLOB_RECURSE ENGINE_SRC "engine/src/*.c")
+file(GLOB_RECURSE EXECUTABLE_SRC "executable/src/*.c")
 
-# Make the framework library with temporary source list
-add_library(miracle STATIC lib/src/containers/dynamic_array.c)
+# Make the framework library
+add_library(miracle STATIC ${MIRACLE_LIB_SRC})
 target_include_directories(miracle PUBLIC lib/include)
 
-# Make the shared application library with temporary source list
-add_library(application SHARED ../src/app.c)
-target_include_directories(application PUBLIC ../include)
-target_link_libraries(application miracle)
+# Make the rest of the libraries either statically linked or dynamically.
+if (LINK STREQUAL "STATIC")
 
-# Make the shared engine library with temporary source list
-add_library(engine SHARED engine/src/engine.c)
-target_include_directories(engine PUBLIC engine/include)
-target_link_libraries(engine miracle)
+    message("Building static...")
+    add_definitions(-DSTATIC_LINK)
 
-# Make executable with temporary source list.
-add_executable(${PROJECT_NAME} 
-    executable/src/library.c
-    executable/src/main.c
-    executable/src/platform/windows.c 
-    executable/src/platform/linux.c
-)
-target_include_directories(${PROJECT_NAME} PUBLIC executable/include)
-target_link_libraries(${PROJECT_NAME} miracle)
+    # Application Library
+    add_library(application STATIC ${APPLICATION_SRC})
+    target_include_directories(application PUBLIC ../include)
+    target_link_libraries(application miracle)
 
-# Link the application to the executable
-# target_link_libraries(${PROJECT_NAME} application)
+    # Engine Library
+    add_library(engine STATIC ${ENGINE_SRC})
+    target_include_directories(engine PUBLIC engine/include)
+    target_link_libraries(engine miracle)
+
+    # Executable
+    add_executable(${PROJECT_NAME} ${EXECUTABLE_SRC})
+    target_include_directories(${PROJECT_NAME} PUBLIC executable/include)
+    target_link_libraries(${PROJECT_NAME} miracle application engine)
+
+elseif (LINK STREQUAL "DYNAMIC")
+
+    message("Building dynamically...")
+    add_definitions(-DDYNAMIC_LINK)
+
+    # Application Library
+    add_library(application SHARED ${APPLICATION_SRC})
+    target_include_directories(application PUBLIC ../include)
+    target_link_libraries(application miracle)
+
+    # Engine Library
+    add_library(engine SHARED ${ENGINE_SRC})
+    target_include_directories(engine PUBLIC engine/include)
+    target_link_libraries(engine miracle)
+
+    # Executable
+    add_executable(${PROJECT_NAME} ${EXECUTABLE_SRC})
+    target_include_directories(${PROJECT_NAME} PUBLIC executable/include)
+    target_link_libraries(${PROJECT_NAME} miracle)
+
+else()
+    message(FATAL_ERROR "Invalid LINK_TYPE: ${LINK_TYPE}. Use 'STATIC' or 'DYNAMIC'.")
+endif()

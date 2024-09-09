@@ -12,12 +12,12 @@
         {
             "label": "l-build-linux",
             "type": "shell",
-            "command": "./build.sh make linux debug"
+            "command": "./build.sh make linux dynamic debug"
         },
         {
             "label": "l-build-linux-release",
             "type": "shell",
-            "command": "./build.sh make linux"
+            "command": "./build.sh make linux static"
         },
         {
             "label": "l-run-linux",
@@ -32,12 +32,12 @@
         {
             "label": "l-build-windows",
             "type": "shell",
-            "command": "./build.sh make windows debug"
+            "command": "./build.sh make windows dynamic debug"
         },
         {
             "label": "l-build-windows-release",
             "type": "shell",
-            "command": "./build.sh make windows"
+            "command": "./build.sh make windows static"
         },
         {
             "label": "l-run-windows",

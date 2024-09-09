@@ -5,7 +5,9 @@ echo "Running build script..."
 # Variables
 ACTION=$1
 PLATFORM=$2
-DEBUG=$3
+LINKING=$3
+DEBUG=$4
+
 
 # Function to clean build and bin directories
 clean() {
@@ -25,6 +27,18 @@ make() {
     # Create build directory if it doesn't already exist
     mkdir -p build/$PLATFORM
 
+    # Set linking type (static or dynamic)
+    if [ "$LINKING" == "static" ]; then
+        echo "Static linking enabled."
+        LINK_TYPE="-DLINK=STATIC"
+    elif [ "$LINKING" == "dynamic" ]; then
+        echo "Dynamic linking enabled."
+        LINK_TYPE="-DLINK=DYNAMIC"
+    else
+        echo "Error: Invalid link type specified. Use 'static' or 'dynamic'."
+        exit 1
+    fi
+
     # Set build type to Debug if DEBUG is specified as 'debug'
     if [ "$DEBUG" == "debug" ]; then
         echo "Debug build enabled."
@@ -36,10 +50,10 @@ make() {
     # Generate build files for the specified platform
     case $PLATFORM in
         windows)
-            cmake -B build/$PLATFORM -DCMAKE_TOOLCHAIN_FILE=windows.cmake -DPLATFORM=$PLATFORM $BUILD_TYPE
+            cmake -B build/$PLATFORM -DCMAKE_TOOLCHAIN_FILE=windows.cmake -DPLATFORM=$PLATFORM $LINK_TYPE $BUILD_TYPE 
             ;;
         linux)
-            cmake -B build/$PLATFORM -DPLATFORM=$PLATFORM $BUILD_TYPE
+            cmake -B build/$PLATFORM -DPLATFORM=$PLATFORM $LINK_TYPE $BUILD_TYPE 
             ;;
         *)
             echo "Error: Unsupported platform specified. Please specify [linux|windows]."
