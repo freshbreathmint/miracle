@@ -21,17 +21,17 @@ void* open_library(const char* lib_name) {
     return handle;
 }
 
-void (*get_function_pointer(void* handle, const char* func_name))() {
-    // Get the function pointer
-    void (*function_ptr)() = (void (*)())GetProcAddress((HMODULE)handle, func_name);
+void* get_function_address(void* handle, const char* func_name) {
+    // Get the function address
+    void* function_addr = GetProcAddress((HMODULE)handle, func_name);
 
     // Check for errors
-    if (!function_ptr) {
+    if (!function_addr) {
         fprintf(stderr, "Error finding symbol: %lu\n", GetLastError());
         return NULL;
     }
 
-    return function_ptr;
+    return function_addr;
 }
 
 void close_library(void* handle) {
