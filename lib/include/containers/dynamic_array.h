@@ -1,3 +1,5 @@
+#pragma once
+
 #include <stddef.h>
 
 #define ARRAY_DEFAULT_CAPACITY 1

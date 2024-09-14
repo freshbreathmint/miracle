@@ -1,16 +1,24 @@
 #pragma once
 
-#include "engine.h" //for the functions
+/* [STATIC LINKING] */
+#ifdef STATIC_LINK
+//#include ""   // type function(args)
+#endif //STATIC_LINK
 
+/* [DYNAMIC LINKING] */
+#ifdef DYNAMIC_LINK
+#include "libapi_dynamic.h"
 #include "containers/dynamic_array.h"
 
-void** export_funcs(){
-    // Create function pointer array.
-    void** funcs = array(void*);
+// Function Declarations
+//DECLARE_FUNCTION(TYPE, FUNCTION, ARGS)
 
-    funcs = array_push(void*, funcs, &(void*){(void*)funcA});
-    funcs = array_push(void*, funcs, &(void*){(void*)funcB});
+// Function Import
+FuncInfo* import_funcs(){
+    FuncInfo* info = array(FuncInfo);
+ 
+    //IMPORT_FUNCTION(info, LIBRARY, FUNCTION)
 
-    // Return the array.
-    return funcs;
+    return info;
 }
+#endif //DYNAMIC_LINK
