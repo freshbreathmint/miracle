@@ -1,8 +1,8 @@
 # Overview
 
-This document provides a guide to debugging applications developed using the Miracle Framework, leveraging Visual Studio Code's integration with GDB for effective debugging. The following configurations and practices will help streamline the debugging process, ensuring that developers can efficiently diagnose and resolve issues within their projects.
+This guide provides instructions for debugging applications developed using the Miracle Framework, utilizing Visual Studio Code's integration with GDB and Valgrind. The outlined configurations and practices are designed to help developers efficiently identify and resolve issues within their projects.
 
-The Miracle Framework's debugging setup is designed to be versatile, accommodating various debugging needs from basic breakpoints and variable inspections to more advanced memory management checks using Valgrind at the same time as debugging. This is achieved through custom launch configurations and tasks in Visual Studio Code, enabling seamless integration with the GNU Debugger (GDB) and Valgrind.
+The Miracle Framework's debugging setup is flexible, supporting a range of debugging needs, from breakpoints and variable inspections to advanced memory checks with Valgrind. Custom launch configurations and tasks in Visual Studio Code allow seamless integration with the GNU Debugger (GDB) and Valgrind.
 
 ### Prerequisites
 
