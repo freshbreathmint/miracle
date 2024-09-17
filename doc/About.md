@@ -1,16 +1,25 @@
 # Miracle Framework
 
-*"It's a miracle that anything I made here works!"*
+*"It's a miracle I actually got this far!"*
 
 ## Overview
 
-Miracle Framework is an evolving software framework designed to offer a comprehensive set of tools for application development. The primary goal of this framework is to simplify the process of designing, building, and deploying software, making it accessible and efficient for both myself and other developers.
+Miracle Framework is a dynamic software framework designed to simplify the development of modular applications across multiple platforms, specifically Windows and Linux. It is designed to allow developers to create applications as dynamically loadable libraries, which in the future will facilitate hot reloading and modularity. The framework is built entirely in C, emphasizing minimal dependencies to keep the codebase lightweight and efficient.
 
-At its current stage, Miracle Framework operates as an advanced build system. It streamlines the setup process, allowing users to quickly establish a working environment. This means developers can focus more on writing code and less on the often cumbersome tasks of configuring build systems and other initial setup procedures.
+Currently, at its core, the Miracle Framework provides mechanisms for loading and unloading libraries at runtime, and dynamically linking them at runtime. It also comes with a build system and workspace file to facilitate cross-platform development and quickly establish a working environment. The framework also comes with a demo application workspace and default required files that can be automatically copied into the parent directory using a script file.
 
-Looking ahead, the framework is planned to be expanded with capabilities for creating applications as dynamically loadable libraries. This system will allow not only the core application libraries but also additional dependencies to be loaded on demand, offering enhanced modularity and flexibility. As more tools and features are incorporated, Miracle Framework will hopefully evolve into a robust and versatile platform, tailored for comprehensive software development.
+In the future, the build system and framework itself will incorporate dynamic application and library hot reloading as a primary feature, allowing for recompilation and automatic re-linking of a program without restarting or losing the framework/application/library state.
 
 ## Design Philosophy
+
+The framework is developed with the following principles in mind:
+
+Minimal Dependencies: Built entirely in C with minimal external libraries, enabling developers to understand and extend the core functionality easily.
+Modularity: Encourages separation of concerns by supporting dynamically loadable libraries, allowing for flexible and scalable application architectures.
+Cross-Platform Support: Provides a unified API for both Windows and Linux platforms, abstracting away platform-specific complexities.
+Dynamic Linking: Supports both static and dynamic linking modes, giving developers control over how libraries are integrated into their applications.
+Hot Reloading: Aims to facilitate hot reloading of libraries without losing application state, enhancing development workflows and reducing downtime.
+
 
 Miracle Framework is being developed entirely in C, with a focus on minimizing dependencies and external libraries. Dependencies are only included when absolutely necessary or when they offer significant efficiency, such as in cases involving proprietary hardware. This design choice enables developers to gain a deep understanding of the framework’s core functionality quickly, while also maintaining a lightweight and efficient codebase.
 
