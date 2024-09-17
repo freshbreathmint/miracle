@@ -2,8 +2,18 @@
 
 ## IN DEVELOPMENT
 
+Changes: 
+    - N/A
+
+## Version 0.4.0
+
 Changes:
-    - Added dynamic arrays.
+    - Significantly changed project sturcture.
+    - Added placeholder 'engine' library.
+    - Added MiracleLib library with dynamic arrays.
+    - Libraries can now be loaded dynamically or statically.
+    - Libraries now automatically link and resolve eachother's functions.
+    - You can import functions into the application and other dyanmically loaded libraries.
 
 ## Version 0.3.0
 
