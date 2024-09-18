@@ -7,8 +7,7 @@
 
 /* [DYNAMIC LINKING] */
 #ifdef DYNAMIC_LINK
-#include "libapi_dynamic.h"
-#include "containers/dynamic_array.h"
+#include "core/function.h"
 
 // Function Declarations
 //DECLARE_FUNCTION(TYPE, FUNCTION, ARGS)
