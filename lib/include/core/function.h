@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include "containers/dynamic_array.h"
 
+
 // Function Info
 typedef struct {
     char* library;
@@ -47,4 +48,7 @@ void assign_functions(FuncInfo* func_info){
             *(func->func_ptr) = func->address;
         }
     }
+
+    // Destroy the FuncInfo array now that we are done using it.
+    array_free(func_info);
 }   

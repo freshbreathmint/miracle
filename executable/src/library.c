@@ -1,5 +1,6 @@
 #include "library.h"
 
+#include <malloc.h>
 #include <stdio.h>
 #include <string.h>
 #include "containers/dynamic_array.h"
@@ -16,7 +17,7 @@ Library* load_library(const char* lib_name){
     // Get the handle.
     Library lib;
     lib.handle = open_library(lib_name);
-    lib.name = strdup(lib_name);
+    lib.name = strdup(lib_name); //FIXME: Gets freed later, probably a more elegant solution.
 
     // Assign API functions
     lib.import_funcs = (FuncInfo* (*)())get_function_address(lib.handle, "import_funcs");
@@ -77,6 +78,7 @@ void unload_all_libraries(){
     // Unload each library.
     int len = array_length(libraries);
     for(int i = 0; i < len; ++i){
+        free(libraries[i].name); //FIXME: See line 20.
         unload_library(libraries[i].handle);
     }
 
