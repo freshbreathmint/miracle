@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stdbool.h>
+
 // Stack
 /**
  * @brief A simple stack container for arbitrary data types.
@@ -19,4 +21,5 @@ typedef struct Stack {
     void*           memory;
 } Stack;
 
-Stack* stack_create(unsigned int element_size);
+bool stack_create(Stack *s, unsigned int element_size);
+void stack_destroy(Stack *s);
