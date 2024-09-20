@@ -22,6 +22,13 @@ file(GLOB_RECURSE APPLICATION_SRC "../src/*.c")
 file(GLOB_RECURSE ENGINE_SRC "engine/src/*.c")
 file(GLOB_RECURSE EXECUTABLE_SRC "executable/src/*.c")
 
+# Collect Third Party File Sources
+file(GLOB_RECURSE INIH_SRC "third_party/inih/src/*.c")
+
+# Compile Third Party Libs
+add_library(inih STATIC ${INIH_SRC})
+target_include_directories(inih PUBLIC third_party/inih/include)
+
 # Make the framework library
 add_library(miracle STATIC ${MIRACLE_LIB_SRC})
 target_include_directories(miracle PUBLIC lib/include)
@@ -45,7 +52,7 @@ if (LINK STREQUAL "STATIC")
     # Executable
     add_executable(${PROJECT_NAME} ${EXECUTABLE_SRC})
     target_include_directories(${PROJECT_NAME} PUBLIC executable/include)
-    target_link_libraries(${PROJECT_NAME} miracle application engine)
+    target_link_libraries(${PROJECT_NAME} inih miracle application engine)
 
 elseif (LINK STREQUAL "DYNAMIC")
 
@@ -65,7 +72,7 @@ elseif (LINK STREQUAL "DYNAMIC")
     # Executable
     add_executable(${PROJECT_NAME} ${EXECUTABLE_SRC})
     target_include_directories(${PROJECT_NAME} PUBLIC executable/include)
-    target_link_libraries(${PROJECT_NAME} miracle)
+    target_link_libraries(${PROJECT_NAME} inih miracle)
 
 else()
     message(FATAL_ERROR "Invalid LINK_TYPE: ${LINK_TYPE}. Use 'STATIC' or 'DYNAMIC'.")
