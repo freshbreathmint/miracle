@@ -6,8 +6,8 @@
                 "${workspaceFolder}/../include",
                 "${workspaceFolder}/executable/include",
                 "${workspaceFolder}/engine/include",
-                "${workspaceFolder}/lib/include",
-                "${workspaceFolder}/third_party/inih/include"
+                "${workspaceFolder}/lib/core/include",
+                "${workspaceFolder}/lib/third_party/inih/include"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",
