@@ -23,3 +23,6 @@ typedef struct Stack {
 
 bool stack_create(Stack *s, unsigned int element_size);
 void stack_destroy(Stack *s);
+bool stack_push(Stack *s, const void* element);
+bool stack_pop(Stack *s, void* out_element);
+bool stack_peek(const Stack *s, void* out_element);

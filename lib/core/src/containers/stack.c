@@ -1,6 +1,7 @@
 #include "containers/stack.h"
 
 #include <stdlib.h>
+#include <string.h>
 
 static bool _stack_ensure_allocated(Stack *s, unsigned int min_capacity){
     if(s->allocated >= s->element_size * min_capacity){
@@ -18,7 +19,7 @@ static bool _stack_ensure_allocated(Stack *s, unsigned int min_capacity){
     void* new_memory = realloc(s->memory, new_allocated);
     if(!new_memory){
         // Allocation failed.
-        //TODO: Some sort of error message
+        //TODO: Error msg
         return false;
     }
 
@@ -31,7 +32,7 @@ static bool _stack_ensure_allocated(Stack *s, unsigned int min_capacity){
 bool stack_create(Stack *s, unsigned int element_size){
     // Make sure it's a valid stack.
     if(!s){
-        //TODO: Some sort of error message
+        //TODO: Error msg
         return false;
     }
 
@@ -58,4 +59,48 @@ void stack_destroy(Stack *s){
     s->allocated = 0;
     s->element_count = 0;
     s->element_size = 0;
+}
+
+bool stack_push(Stack *s, const void* element){
+    if(!s || !element){
+        // Invalid stack or element.
+        //TODO: Error msg
+        return false;
+    }
+
+    // Ensure there's space for the new element.
+    if(!_stack_ensure_allocated(s, s->element_count + 1)){
+        return false;
+    }
+
+    // Calculate the address where the new element should be placed.
+    void* target = (char*)s->memory + (s->element_count * s->element_size);
+    memcpy(target, element, s->element_size);
+    s->element_count++;
+    return true; 
+}
+
+bool stack_pop(Stack *s, void* out_element){
+    if(!s || s->element_count == 0 || !out_element){
+        // Invalid use
+        //TODO: Error msg
+        return false;
+    }
+
+    s->element_count--;
+    void* source = (char*)s->memory + (s->element_count * s->element_size);
+    memcpy(out_element, source, s->element_size);
+    return true;
+}
+
+bool stack_peek(const Stack *s, void* out_element){
+    if(!s || s->element_count == 0 || !out_element){
+        // Invalid stack or no elements
+        //TODO: Error msg
+        return false;
+    }
+
+    void* source = (char*)s->memory + ((s->element_count - 1) * s->element_size);
+    memcpy(out_element, source, s->element_size);
+    return true;
 }
