@@ -17,21 +17,21 @@ if (DEFINED PLATFORM)
 endif()
 
 # Collect all file sources for each target.
-file(GLOB_RECURSE MIRACLE_LIB_SRC "lib/src/*.c")
+file(GLOB_RECURSE MIRACLE_LIB_SRC "lib/core/src/*.c")
 file(GLOB_RECURSE APPLICATION_SRC "../src/*.c")
 file(GLOB_RECURSE ENGINE_SRC "engine/src/*.c")
 file(GLOB_RECURSE EXECUTABLE_SRC "executable/src/*.c")
 
 # Collect Third Party File Sources
-file(GLOB_RECURSE INIH_SRC "third_party/inih/src/*.c")
+file(GLOB_RECURSE INIH_SRC "lib/third_party/inih/src/*.c")
 
 # Compile Third Party Libs
 add_library(inih STATIC ${INIH_SRC})
-target_include_directories(inih PUBLIC third_party/inih/include)
+target_include_directories(inih PUBLIC lib/third_party/inih/include)
 
 # Make the framework library
 add_library(miracle STATIC ${MIRACLE_LIB_SRC})
-target_include_directories(miracle PUBLIC lib/include)
+target_include_directories(miracle PUBLIC lib/core/include)
 
 # Make the rest of the libraries either statically linked or dynamically.
 if (LINK STREQUAL "STATIC")
