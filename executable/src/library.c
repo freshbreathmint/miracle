@@ -68,6 +68,16 @@ Library* load_library(const char* lib_name){
     }
 }
 
+Library* get_loaded_library(const char* lib_name){
+    if(!libraries) return NULL;
+    for (size_t i = 0; i < array_length(libraries); i++){
+        if(strcmp(libraries[i].name, lib_name) == 0){
+            return &libraries[i];
+        }
+    }
+    return NULL; // Not found.
+}
+
 void unload_library(void* handle){
     close_library(handle);
 }

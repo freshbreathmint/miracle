@@ -17,4 +17,5 @@ typedef struct {
 } Library;
 
 Library* load_library(const char* lib_name);
+Library* get_loaded_library(const char* lib_name);
 void unload_all_libraries();
