@@ -12,7 +12,7 @@ int main()
     #include "config.h"
 
     // Load the libraries from the config file
-    if(!load_libraries_from_config("/home/mints/testapp/config.ini")){
+    if(!load_libraries_from_config("/home/mints/testapp/config.ini")){ //TODO: Local file path
         return 1;
     }
     
@@ -22,7 +22,7 @@ int main()
         return 1;
     }
 
-    // Get the application entry point.
+    // Get the applicationentry point.
     void (*entry)() = (void (*)())get_function_address(app_lib->handle, "entry");
     if (!entry) {
         return 1;
