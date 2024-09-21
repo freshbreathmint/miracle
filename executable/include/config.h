@@ -4,7 +4,7 @@
 
 typedef struct LibraryEntry {
     char *name;             // Name of the library
-    char *type;             // "dynamic" or "static"
+    bool is_dynamic;        // True if type == "dynamic"
     char **dependencies;    // Dynamic array of dependency names
 } LibraryEntry;
 

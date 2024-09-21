@@ -11,22 +11,18 @@ int main()
     #include "platform/platform.h"
     #include "config.h"
 
-    // Load the libraries
-    load_library("libengine");
-    load_library("libapplication");
-
-    // THIS WILL REPLACE ABOVE
-    if(!load_libraries_from_config("config.ini")){
+    // Load the libraries from the config file
+    if(!load_libraries_from_config("/home/mints/testapp/config.ini")){
         return 1;
     }
     
-    // Get the application library manually (Need to make this function)
+    // Get the application library handle
     Library* app_lib = get_loaded_library("libapplication");
     if(!app_lib){
         return 1;
     }
 
-    // Get the entry point manually.
+    // Get the application entry point.
     void (*entry)() = (void (*)())get_function_address(app_lib->handle, "entry");
     if (!entry) {
         return 1;
