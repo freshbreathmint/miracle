@@ -54,9 +54,14 @@
 						"description": "                                     (WSL Only) Cross-compile for Windows and run the executable."
 					},
 					{
-						"label": "$(key) Generate Release Builds",
+						"label": "$(wrench) $(key) Generate Release Builds",
 						"task": "l-generate-release-builds",
 						"description": "                                           Create release builds for both Linux and Windows."
+					},
+					{
+						"label": "$(notebook-execute) $(key) Run Release Builds",
+						"task": "l-run-release",
+						"description": "                                                                                    Run the linux release build."
 					},
 				]
 			},
@@ -65,6 +70,9 @@
 	"extensions": {
 		"recommendations": [
 			"gruntfuggly.todo-tree",
+			"ms-python.debugpy",
+			"ms-python.python",
+			"ms-python.vscode-pylance",
 			"ms-vscode.cpptools",
 			"spencerwmiles.vscode-task-buttons",
 			"twxs.cmake",
