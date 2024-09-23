@@ -69,6 +69,9 @@ import configparser
 import os
 import sys
 
+# CMAKE Global Variables
+cmake_min_version = "VERSION 3.30"
+
 def parse_config():
     config = configparser.ConfigParser()
     config.read('config.ini')
@@ -92,17 +95,11 @@ def parse_config():
 
     return application, libraries
 
-def get_build_directory(platform, build_type):
+def get_directory(platform, build_type):
     if build_type == 'hot':
-        return os.path.join('build', platform, 'debug')
+        return os.path.join(platform, 'debug')
     else:
-        return os.path.join('build', platform, build_type)
-    
-def get_bin_directory(platform, build_type):
-    if build_type == 'hot':
-        return os.path.join('bin', platform, 'debug')
-    else:
-        return os.path.join('bin', platform, build_type)
+        return os.path.join(platform, build_type)
     
 def get_static_dependencies(target, application, libraries, resolved=None):
     if resolved is None:
@@ -120,7 +117,12 @@ def get_static_dependencies(target, application, libraries, resolved=None):
 
     return resolved
 
-def generate_cmake(build_dir, bin_dir, platform, build_type, application, libraries, targets):
+def generate_cmake():
+    cmake_lines = []
+
+    # Project Details
+    cmake_lines.append(f'cmake_minimum_required({cmake_min_version})\n')
+    cmake_lines.append(f'project()\n')
 
 
 
@@ -132,8 +134,9 @@ def build(args):
     build_type = args.build_type
 
     # Determine build directories
-    build_dir = get_build_directory(platform, build_type)
-    bin_dir = get_bin_directory(platform, build_type)
+    dir = get_directory(platform, build_type)
+    build_dir = os.path.join('build', dir)
+    bin_dir = os.path.join('bin', dir)
     os.makedirs(build_dir, exist_ok=True)
     os.makedirs(bin_dir, exist_ok=True)
 
@@ -172,7 +175,7 @@ def build(args):
     generate_cmake()
 
     # Run CMake
-    run_cmake(build_dir, platform)
+    run_cmake()
 
 def main():
     parser = argparse.ArgumentParser(description='Miracle Framework Build Script')
