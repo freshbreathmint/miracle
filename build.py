@@ -227,7 +227,7 @@ def generate_cmake(application, build_type, platform, bin_dir, to_build, librari
         # Build the executable
         cmake_lines.append('# EXECUTABLE')
         cmake_lines.append(f'add_executable(${{PROJECT_NAME}} ${{EXE_SRC}})')
-        cmake_lines.append('target_include_directories(${{PROJECT_NAME}} PUBLIC executable/include)')
+        cmake_lines.append('target_include_directories(${PROJECT_NAME} PUBLIC executable/include)')
         cmake_lines.append(f'target_compile_definitions(${{PROJECT_NAME}} PUBLIC -D{definition})')
 
         # Link to libraries
@@ -313,6 +313,36 @@ def build(args):
     # Run CMake
     run_cmake(build_dir)
 
+def build_exe(args):
+    application, libraries = parse_config()
+
+    platform = args.platform
+    build_type = args.build_type
+    link_type = args.link
+
+    # Determine build directories
+    dir = get_directory(platform, build_type)
+    build_dir = os.path.join('build', dir)
+    bin_dir = os.path.join('bin', dir)
+    os.makedirs(build_dir, exist_ok=True)
+    os.makedirs(bin_dir, exist_ok=True)
+
+    # Add libraries to build list
+    to_build = list(libraries.keys())
+    to_build.append('application')
+
+    # Remove duplicates
+    to_build = list(dict.fromkeys(to_build))
+
+    # Sort build list by dependency
+    to_build = topological_sort(to_build, application, libraries)
+
+    # Generate CMakeLists.txt with exe=True
+    generate_cmake(application, build_type, platform, bin_dir, to_build, libraries, exe=True, link_type=link_type)
+
+    # Run CMake
+    run_cmake(build_dir)
+
 def clean():
     # Remove build and bin directories
     if os.path.exists('build'):
@@ -350,8 +380,8 @@ def main():
 
     if args.command == 'build':
         build(args)
-    # elif args.command == 'build-exe':
-    #     build_exe(args)
+    elif args.command == 'build-exe':
+        build_exe(args)
     elif args.command == 'clean':
         clean()
     else:
