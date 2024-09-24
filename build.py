@@ -118,10 +118,6 @@ def generate_cmake(application, build_type, platform, bin_dir, to_build, librari
         cmake_build_type = build_type.capitalize()
     cmake_lines.append(f'set(CMAKE_BUILD_TYPE {cmake_build_type})\n')
 
-    # Platform toolchains
-    if platform == 'windows':
-        cmake_lines.append('set(CMAKE_TOOLCHAIN_FILE windows.cmake)\n')
-
     # Set output directories
     cmake_lines.append(f'set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${{CMAKE_SOURCE_DIR}}/{bin_dir}")')
     cmake_lines.append(f'set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${{CMAKE_SOURCE_DIR}}/{bin_dir}")')
@@ -245,10 +241,13 @@ def generate_cmake(application, build_type, platform, bin_dir, to_build, librari
 
     print("CMakeLists.txt Generated")
 
-def run_cmake(build_dir):
+def run_cmake(build_dir, platform):
     try:
         print(f"Configuring the project with CMake in '{build_dir}'...")
-        subprocess.check_call(['cmake', '-B', build_dir])
+        if platform == 'windows':
+            subprocess.check_call(['cmake', '-B', build_dir, '-DCMAKE_TOOLCHAIN_FILE=windows.cmake'])
+        else:
+            subprocess.check_call(['cmake', '-B', build_dir])
         print("CMake configuration completed successfully.\n")
 
         print(f"Building the project with CMake in '{build_dir}'...")
@@ -311,7 +310,7 @@ def build(args):
     generate_cmake(application, build_type, platform, bin_dir, to_build, libraries, exe=False, link_type='dynamic')
 
     # Run CMake
-    run_cmake(build_dir)
+    run_cmake(build_dir, platform)
 
 def build_exe(args):
     application, libraries = parse_config()
@@ -341,7 +340,7 @@ def build_exe(args):
     generate_cmake(application, build_type, platform, bin_dir, to_build, libraries, exe=True, link_type=link_type)
 
     # Run CMake
-    run_cmake(build_dir)
+    run_cmake(build_dir, platform)
 
 def clean():
     # Remove build and bin directories
