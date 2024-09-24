@@ -67,8 +67,10 @@ static void process_library(const char* lib_name, ConfigContext* context, char**
     }
 
     // After processing dependencies, add lib_name to load_list
-    char* lib_name_copy = strdup(lib_name);
-    *load_list = array_push(char*, *load_list, &lib_name_copy);
+    char* fixed_name = malloc(strlen(lib_name) + strlen("lib") + 1);
+    strcpy(fixed_name, "lib");
+    strcat(fixed_name, lib_name);
+    *load_list = array_push(char*, *load_list, &fixed_name);
 }
 
 // Handler function for ini_parse
