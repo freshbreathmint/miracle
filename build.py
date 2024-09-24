@@ -1,80 +1,16 @@
-# command structure:
-# ./build.py build
-#       --target: [all], [application], [library name]
-#       --platform: [windows], [linux]
-#       --build-type: [debug], [release], [hot]
-# ./build.py build-exe
-#       --platform: [windows], [linux]
-#       --link: [dynamic], [static]
-#       --build-type: [debug], [release], [hot]
-# ./build.py clean
-
-# Example INI config.ini
-# [application]
-# name=MyApp
-# icon=icon.ico
-# dependencies=libengine,libmiracle
-# 
-# [library.libengine]
-# path=miracle/engine/
-# type=dynamic
-# dependencies=libmiracle
-# 
-# [library.libmiracle]
-# path=miracle/lib/core/
-# type=static
-# dependencies=
-
-# build:
-#   since building specific libraries or the application is a functionality only useful for runtime-loading of shared libraries, 
-#   the way each library is built will be dependant on what 'type' it is in the ini file.
-#
-#   as an example, if the user input build --target application --platform linux --build-type debug
-#   the result will be this:
-#       we find every dependency used by the application (in this case, libengine, libmiracle)
-#       dynamic type libraries are ignored, but we want to build libmiracle because it is a static library.
-#       therefore, we need cmake to build libmiracle, then build libapplication and link libmiracle as a dependency
-#       we use no toolchain (if the platform was windows, we would use windows.cmake), and we add debug flags to the final compile of the library
-#
-#   if the user did a library like libengine, it would be the same process except the final output would be named libengine (it is important that the library is not named "liblibengine")
-#
-#   if the type of the library is dynamic, make sure it gets the flag -DDYNAMIC_LINK during compile
-#
-#   platform and build-type control what directories are created for the build & bin process. all cmake build files should go in a build/[platform]/[build-type] directory
-#   all executables and build libraries and copied resources/files should go to a bin/[platform]/[build-type] directory.
-#   if the build-type is [hot], it should go in [debug] folders.
-#
-#   [hot] build type means the same thing as debug, adding debug flags, except the final library should be named for example "libapplication" + a unix timestamp like "libapplication1726998800"
-#   it also gets output to the normal bin/[platform]/debug folder just like a normal debug build
-
-# build-exe:
-#   same thing essentially as build --target all, but different logic, because the link type for the executable is specified here.
-#   if we do --link dynamic, build all the libraries and the application library as if we did --target all, and also build the executable
-#       meaning we should have via the example:
-#       * an executable named MyApp with an icon located at icon.ico
-#       * libapplication shared library with libmiracle baked in as a static library
-#       * libengine shared library with libmiracle baked in as a static library
-#   if we do --link static, we build all the libraries and the application libraries as STATIC libraries, and link them to the executable as static libraries.
-#   everything gets the flag -DSTATIC_LINK when we build this way.
-#   so the difference is, if we build dynamically, we get the executable with shared objects all with -DDYNAMIC_LINK
-#   if we build static, we get a single executable named MyApp with the icon.ico icon, compiled with -DSTATIC_LINK
-
-# clean:
-#   cleans up the build/ and bin/ folders that were created by the build process.
-
 #!/usr/bin/env python3
 
 import argparse
 import configparser
 import os
+import subprocess
 import sys
-
-# CMAKE Global Variables
-cmake_min_version = "VERSION 3.30"
+import time
+from collections import defaultdict
 
 def parse_config():
     config = configparser.ConfigParser()
-    config.read('config.ini')
+    config.read('../config.ini')
 
     application = {
         'name': config.get('application', 'name'),
@@ -117,14 +53,211 @@ def get_static_dependencies(target, application, libraries, resolved=None):
 
     return resolved
 
-def generate_cmake():
+def topological_sort(to_build, application, libraries):
+    # Build dependency graph
+    graph = defaultdict(list)
+    nodes = set()
+
+    for target in to_build:
+        nodes.add(target)
+        if target == 'application':
+            dependencies = application['dependencies']
+        else:
+            dependencies = libraries[target]['dependencies']
+        for dep in dependencies:
+                    graph[target].append(dep)
+                    nodes.add(dep)
+
+    visited = {}
+    stack = []
+    has_cycle = False
+    
+    def dfs(node):
+        nonlocal has_cycle
+        if node in visited:
+            if visited[node] == 'visiting':
+                has_cylce = True
+            return
+        visited[node] = 'visiting'
+        for neighbor in graph[node]:
+            dfs(neighbor)
+        visited[node] = 'visited'
+        stack.append(node)
+
+    for node in nodes:
+        if node not in visited:
+            dfs(node)
+
+    if has_cycle:
+        print("Error: Cyclic dependency detected.")
+        sys.exit(1)
+
+    # Reverse the stack
+    # sorted_order = stack[::-1]
+
+    # Filter the sorted_order to include only the to_build targets
+    final_build_order = [target for target in stack if target in to_build]
+
+    return final_build_order
+
+def generate_cmake(application, build_type, platform, bin_dir, to_build, libraries, exe, link_type):
+    print("Generating CMakeLists.txt")
+    print("Build targets:", to_build)
+
     cmake_lines = []
 
     # Project Details
+    cmake_min_version = "VERSION 3.30"
     cmake_lines.append(f'cmake_minimum_required({cmake_min_version})\n')
-    cmake_lines.append(f'project()\n')
+    cmake_lines.append(f'project({application["name"]})\n')
 
+    # Set build type
+    if build_type == 'hot':
+        cmake_build_type = 'Debug'
+    else:
+        cmake_build_type = build_type.capitalize()
+    cmake_lines.append(f'set(CMAKE_BUILD_TYPE {cmake_build_type})\n')
 
+    # Platform toolchains
+    if platform == 'windows':
+        cmake_lines.append('set(CMAKE_TOOLCHAIN_FILE windows.cmake)\n')
+
+    # Set output directories
+    cmake_lines.append(f'set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${{CMAKE_SOURCE_DIR}}/{bin_dir}")')
+    cmake_lines.append(f'set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${{CMAKE_SOURCE_DIR}}/{bin_dir}")')
+    cmake_lines.append(f'set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${{CMAKE_SOURCE_DIR}}/{bin_dir}")\n')
+
+    # Hot Compile Timestamp
+    if build_type == 'hot':
+        timestamp = str(int(time.time()))
+    else:
+        timestamp = ''
+
+    # Collect source files for each target
+    cmake_lines.append('# Source Files')
+    cmake_lines.append('file(GLOB_RECURSE MIRACLE_CORE_SRC "lib/core/src/*.c")\n')
+
+    for target in to_build:
+        if target == 'application':
+            cmake_lines.append('file(GLOB_RECURSE APPLICATION_SRC "../src/*.c")')
+        else:
+            lib_info = libraries[target]
+            lib_name = target
+            lib_path = lib_info['path']
+            cmake_lines.append(f'file(GLOB_RECURSE {lib_name.upper()}_SRC "../{lib_path}/src/*.c")')
+
+    cmake_lines.append('')
+
+    if exe == True:
+        cmake_lines.append('file(GLOB_RECURSE INIH_SRC "lib/third_party/inih/src/*.c")')
+        cmake_lines.append('file(GLOB_RECURSE EXE_SRC "executable/src/*.c")\n')
+
+    # Build each specified library
+    cmake_lines.append('# MIRACLE CORE')
+    cmake_lines.append('add_library(miracle_core STATIC ${MIRACLE_CORE_SRC})')
+    cmake_lines.append('target_include_directories(miracle_core PUBLIC lib/core/include)\n')
+
+    if link_type == 'dynamic':
+        cmake_lib_type = 'SHARED'
+        definition = 'DYNAMIC_LINK'
+    else:
+        cmake_lib_type = 'STATIC'
+        definition = 'STATIC_LINK'
+
+    exe_deps = {}
+
+    for target in to_build:
+        cmake_lines.append(f'# {target.upper()}')
+        if target == 'application':
+            cmake_lines.append(f'add_library(application{timestamp} {cmake_lib_type} ${{APPLICATION_SRC}})')
+            cmake_lines.append(f'target_include_directories(application{timestamp} PUBLIC ../include)')
+            cmake_lines.append(f'target_compile_definitions(application{timestamp} PUBLIC -D{definition})')
+
+            # Link dependencies
+            cmake_deps = ['miracle_core'] # Always include miracle_core
+            if link_type == 'static':
+                filtered_deps = application['dependencies']
+            else:
+                filtered_deps = [dep for dep in application['dependencies'] if libraries.get(dep, {}).get('type') != 'dynamic']
+            filtered_deps = [f'{dep}{timestamp}' if build_type == 'hot' else dep for dep in filtered_deps]
+            cmake_deps.extend(filtered_deps)
+            dep_str = ' '.join(cmake_deps)
+            cmake_lines.append(f'target_link_libraries(application{timestamp} {dep_str})\n')
+        else:
+            lib_info = libraries[target]
+            lib_name = target
+            lib_type = lib_info['type']
+            dependencies = lib_info['dependencies']
+
+            # Determine library type
+            if lib_type == 'static':
+                cmake_lib_type = 'STATIC'
+            else:
+                if link_type == 'dynamic':
+                    cmake_lib_type = 'SHARED'
+                else:
+                    cmake_lib_type = 'STATIC'
+
+            cmake_lines.append(f'add_library({lib_name}{timestamp} {cmake_lib_type} ${{{lib_name.upper()}_SRC}})')
+            cmake_lines.append(f'target_include_directories({lib_name}{timestamp} PUBLIC ../{lib_info['path']}/include)')
+            cmake_lines.append(f'target_compile_definitions({lib_name}{timestamp} PUBLIC -D{definition})')
+
+            # Link dependencies
+            cmake_deps = []
+            if lib_type == 'dynamic':
+                cmake_deps.append('miracle_core')  # Always include miracle_core in dynamic libraries
+            for dep in dependencies:
+                if link_type == 'static' or libraries.get(dep, {}).get('type') == 'static':
+                    dep_target = f'{dep}{timestamp}' if (build_type == 'hot' and dep in to_build) else dep
+                    cmake_deps.append(dep_target)
+            if cmake_deps:
+                dep_str = ' '.join(cmake_deps)
+                cmake_lines.append(f'target_link_libraries({lib_name}{timestamp} {dep_str})')
+            cmake_lines.append('')
+
+    if exe == True:
+        # Build the EXE, if 'dynamic' link_type then only link 'inih' and 'miracle_core' otherwise link all target libraries too
+        # Executable name should be the same as the project name
+
+        # Build required libs
+        cmake_lines.append('# INIH')
+        cmake_lines.append('add_library(inih STATIC ${INIH_SRC})')
+        cmake_lines.append('target_include_directories(inih PUBLIC lib/third_party/inih/include)\n')
+
+        # Build the executable
+        cmake_lines.append('# EXECUTABLE')
+        cmake_lines.append(f'add_executable(${{PROJECT_NAME}} ${{EXE_SRC}})')
+        cmake_lines.append('target_include_directories(${{PROJECT_NAME}} PUBLIC executable/include)')
+        cmake_lines.append(f'target_compile_definitions(${{PROJECT_NAME}} PUBLIC -D{definition})')
+
+        # Link to libraries
+        cmake_deps = ['inih', 'miracle_core']
+        if link_type != 'dynamic':
+            # Link all target libraries
+            for target in to_build:
+                cmake_deps.append(target)
+        dep_str = ' '.join(cmake_deps)
+        cmake_lines.append(f'target_link_libraries(${{PROJECT_NAME}} {dep_str})\n')
+
+    # Write CMakeLists.txt
+    with open('CMakeLists.txt', 'w') as f:
+        f.write('\n'.join(cmake_lines))
+
+    print("CMakeLists.txt Generated")
+
+def run_cmake(build_dir):
+    try:
+        print(f"Configuring the project with CMake in '{build_dir}'...")
+        subprocess.check_call(['cmake', '-B', build_dir])
+        print("CMake configuration completed successfully.\n")
+
+        print(f"Building the project with CMake in '{build_dir}'...")
+        subprocess.check_call(['cmake', '--build', build_dir])
+        print("CMake build completed successfully.")
+    except subprocess.CalledProcessError as e:
+        print(f"Error: CMake failed with exit code {e.returncode}")
+        sys.exit(1)
+    
 
 def build(args):
     application, libraries = parse_config()
@@ -171,11 +304,28 @@ def build(args):
     # Remove duplicates while preserving order
     to_build = list(dict.fromkeys(to_build))
 
+    # Sort build list by dependency
+    to_build = topological_sort(to_build, application, libraries)
+
     # Generate CMakeLists.txt
-    generate_cmake()
+    generate_cmake(application, build_type, platform, bin_dir, to_build, libraries, exe=False, link_type='dynamic')
 
     # Run CMake
-    run_cmake()
+    run_cmake(build_dir)
+
+def clean():
+    # Remove build and bin directories
+    if os.path.exists('build'):
+        if os.name == 'nt':
+            os.system('rmdir /s /q build')
+        else:
+            os.system('rm -rf build')
+    if os.path.exists('bin'):
+        if os.name == 'nt':
+            os.system('rmdir /s /q bin')
+        else:
+            os.system('rm -rf bin')
+    print("Cleaned build and bin directories.")
 
 def main():
     parser = argparse.ArgumentParser(description='Miracle Framework Build Script')
@@ -200,8 +350,8 @@ def main():
 
     if args.command == 'build':
         build(args)
-    elif args.command == 'build-exe':
-        build_exe(args)
+    # elif args.command == 'build-exe':
+    #     build_exe(args)
     elif args.command == 'clean':
         clean()
     else:
