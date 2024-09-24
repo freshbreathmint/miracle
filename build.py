@@ -245,7 +245,7 @@ def run_cmake(build_dir, platform):
     try:
         print(f"Configuring the project with CMake in '{build_dir}'...")
         if platform == 'windows':
-            subprocess.check_call(['cmake', '-B', build_dir, '-DCMAKE_TOOLCHAIN_FILE=windows.cmake'])
+            subprocess.check_call(['cmake', '-B', build_dir, '-DCMAKE_TOOLCHAIN_FILE=.cmake/windows.cmake'])
         else:
             subprocess.check_call(['cmake', '-B', build_dir])
         print("CMake configuration completed successfully.\n")
