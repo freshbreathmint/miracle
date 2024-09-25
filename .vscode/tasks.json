@@ -12,7 +12,7 @@
         {
             "label": "l-build-linux",
             "type": "shell",
-            "command": "./build.sh make linux dynamic debug"
+            "command": "./build.py build-exe --platform linux --link dynamic --build-type debug"
         },
         {
             "label": "l-build-linux-release",
@@ -22,7 +22,7 @@
         {
             "label": "l-run-linux",
             "type": "shell",
-            "command": "./run.sh bin/linux/debug/executable"
+            "command": "./run.py bin/linux/debug/executable",
         },
         {
             "label": "l-build-and-run-linux",
@@ -63,7 +63,7 @@
         {
             "label": "valgrind",
             "type": "shell",
-            "command": "./run.sh valgrind --vgdb-error=0 --vgdb=full bin/linux/debug/executable",
+            "command": "./run.py valgrind --vgdb-error=0 --vgdb=full bin/linux/debug/executable",
             "isBackground": true,
         },
         {
