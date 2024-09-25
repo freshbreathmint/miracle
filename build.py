@@ -109,7 +109,11 @@ def generate_cmake(application, build_type, platform, bin_dir, to_build, librari
     # Project Details
     cmake_min_version = "VERSION 3.30"
     cmake_lines.append(f'cmake_minimum_required({cmake_min_version})\n')
-    cmake_lines.append(f'project({application["name"]})\n')
+    
+    if build_type == 'release':
+        cmake_lines.append(f'project({application["name"]})\n')
+    else:    
+        cmake_lines.append(f'project(executable)\n')
 
     # Set build type
     if build_type == 'hot':
