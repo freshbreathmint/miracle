@@ -239,6 +239,10 @@ def generate_cmake(application, build_type, platform, bin_dir, to_build, librari
         dep_str = ' '.join(cmake_deps)
         cmake_lines.append(f'target_link_libraries(${{PROJECT_NAME}} {dep_str})\n')
 
+        # Add icon
+        if platform == 'windows':
+            cmake_lines.append('target_sources(${PROJECT_NAME} PRIVATE executable/src/resource.rc)')
+
     # Write CMakeLists.txt
     with open('CMakeLists.txt', 'w') as f:
         f.write('\n'.join(cmake_lines))
