@@ -5,7 +5,6 @@
             "includePath": [
                 "${workspaceFolder}/../include",
                 "${workspaceFolder}/executable/include",
-                "${workspaceFolder}/engine/include",
                 "${workspaceFolder}/lib/core/include",
                 "${workspaceFolder}/lib/third_party/inih/include"
             ],
