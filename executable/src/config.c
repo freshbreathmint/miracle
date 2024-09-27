@@ -7,6 +7,7 @@
 #include <string.h>
 
 #include "library.h"
+#include "platform/platform.h"
 
 #include "containers/dynamic_array.h"
 #include "ini.h"
@@ -211,8 +212,15 @@ bool load_libraries_from_config(const char* config_file) {
     context.libraries = NULL;        // Initialize the dynamic array
     context.app_dependencies = NULL; // Initialize application dependencies
 
+    // Get local file path and concatenate the config file.
+    char* local_path = get_executable_path();
+    char* full_path = (char*)malloc((strlen(local_path) + strlen(config_file)) + 1);
+    strcpy(full_path, local_path);
+    strcat(full_path, config_file);
+    free(local_path);
+
     // Parse config file
-    if (ini_parse(config_file, handler, &context) < 0) {
+    if (ini_parse(full_path, handler, &context) < 0) {
         printf("Error parsing config file.\n");
         success = false;
     } else {
@@ -243,6 +251,9 @@ bool load_libraries_from_config(const char* config_file) {
         // Load the application
         load_library("libapplication");
     }
+
+    // Free the path
+    free(full_path);
 
     // Clean up application dependencies
     if (context.app_dependencies) {

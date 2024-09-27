@@ -6,6 +6,7 @@ import os
 import subprocess
 import sys
 import time
+import shutil
 from collections import defaultdict
 
 def parse_config():
@@ -76,7 +77,7 @@ def topological_sort(to_build, application, libraries):
         nonlocal has_cycle
         if node in visited:
             if visited[node] == 'visiting':
-                has_cylce = True
+                has_cycle = True
             return
         visited[node] = 'visiting'
         for neighbor in graph[node]:
@@ -199,7 +200,7 @@ def generate_cmake(application, build_type, platform, bin_dir, to_build, librari
                     cmake_lib_type = 'STATIC'
 
             cmake_lines.append(f'add_library({lib_name}{timestamp} {cmake_lib_type} ${{{lib_name.upper()}_SRC}})')
-            cmake_lines.append(f'target_include_directories({lib_name}{timestamp} PUBLIC ../{lib_info['path']}/include)')
+            cmake_lines.append(f'target_include_directories({lib_name}{timestamp} PUBLIC ../{lib_info["path"]}/include)')
             cmake_lines.append(f'target_compile_definitions({lib_name}{timestamp} PUBLIC -D{definition})')
 
             # Link dependencies
@@ -280,6 +281,17 @@ def build(args):
     os.makedirs(build_dir, exist_ok=True)
     os.makedirs(bin_dir, exist_ok=True)
 
+    # Copy config.ini if building dynamically
+    try:
+        shutil.copy('../config.ini', bin_dir)
+        print(f"Copied 'config.ini' to '{bin_dir}'.")
+    except shutil.Error as e:
+        print(f"Error copying config.ini: {e}")
+        sys.exit(1)
+    except FileNotFoundError:
+        print("Error: '../config.ini' not found.")
+        sys.exit(1)
+
     # Determine libraries to build
     to_build = []
 
@@ -333,6 +345,18 @@ def build_exe(args):
     bin_dir = os.path.join('bin', dir)
     os.makedirs(build_dir, exist_ok=True)
     os.makedirs(bin_dir, exist_ok=True)
+
+    # Copy config.ini if building dynamically
+    if link_type == 'dynamic':
+        try:
+            shutil.copy('../config.ini', bin_dir)
+            print(f"Copied 'config.ini' to '{bin_dir}'.")
+        except shutil.Error as e:
+            print(f"Error copying config.ini: {e}")
+            sys.exit(1)
+        except FileNotFoundError:
+            print("Error: '../config.ini' not found.")
+            sys.exit(1)
 
     # Add libraries to build list
     to_build = list(libraries.keys())

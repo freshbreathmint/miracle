@@ -12,7 +12,7 @@ int main()
     #include "config.h"
 
     // Load the libraries from the config file
-    if(!load_libraries_from_config("/home/mints/testapp/config.ini")){ //TODO: Local file path
+    if(!load_libraries_from_config("config.ini")){
         return 1;
     }
     
