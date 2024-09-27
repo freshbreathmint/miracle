@@ -34,7 +34,7 @@ void unbound_function(const char *function_name) {
 // Import Function Macro
 #define IMPORT_FUNCTION(array_ptr, lib, function)                           \
     do {                                                                    \
-        func_info_##function.library = #lib;                                \
+        func_info_##function.library = "lib" #lib;                          \
         array_ptr = array_push(FuncInfo, array_ptr, &func_info_##function); \
     } while(0)
 
