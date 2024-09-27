@@ -70,6 +70,7 @@
 	"extensions": {
 		"recommendations": [
 			"gruntfuggly.todo-tree",
+			"mints.miracle-extension",
 			"ms-python.debugpy",
 			"ms-python.python",
 			"ms-python.vscode-pylance",
