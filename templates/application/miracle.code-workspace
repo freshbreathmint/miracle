@@ -13,59 +13,6 @@
 		"files.exclude": {
         	"**/miracle": true
     	},
-		"VsCodeTaskButtons.showCounter": false,
-		"VsCodeTaskButtons.tasks": [
-			{
-				"label": "$(terminal-linux)  Linux/WSL Tasks",
-				"tasks": [
-					{
-						"label": "$(terminal-kill) Clean",
-						"task": "l-clean",
-						"description": "                                                                                 Clean up build files and generated executables."
-					},
-					{
-						"label": "$(wrench) $(terminal-linux) Build",
-						"task": "l-build-linux",
-						"description": "                                                                                                         Build the executable natively."
-					},
-					{
-						"label": "$(notebook-execute) $(terminal-linux) Run",
-						"task": "l-run-linux",
-						"description": "                                                                                     Run the executable in a new bash window."
-					},
-					{
-						"label": "$(notebook-execute-all) $(terminal-linux) Build & Run",
-						"task": "l-build-and-run-linux",
-						"description": "                                                                            Build the executable natively and run it."
-					},
-					{
-						"label": "$(wrench) $(terminal-cmd) Build",
-						"task": "l-build-windows",
-						"description": "                                                                    Cross-compile the executable for Windows systems."
-					},
-					{
-						"label": "$(notebook-execute) $(terminal-cmd) Run",
-						"task": "l-run-windows",
-						"description": "                                         (WSL Only) Run the cross-compiled executable in a new bash window."
-					},
-					{
-						"label": "$(notebook-execute-all) $(terminal-cmd) Build & Run",
-						"task": "l-build-and-run-windows",
-						"description": "                                     (WSL Only) Cross-compile for Windows and run the executable."
-					},
-					{
-						"label": "$(wrench) $(key) Generate Release Builds",
-						"task": "l-generate-release-builds",
-						"description": "                                           Create release builds for both Linux and Windows."
-					},
-					{
-						"label": "$(notebook-execute) $(key) Run Release Builds",
-						"task": "l-run-release",
-						"description": "                                                                                    Run the linux release build."
-					},
-				]
-			},
-		],
 	},
 	"extensions": {
 		"recommendations": [
@@ -75,7 +22,6 @@
 			"ms-python.python",
 			"ms-python.vscode-pylance",
 			"ms-vscode.cpptools",
-			"spencerwmiles.vscode-task-buttons",
 			"twxs.cmake",
 		]
 	}
