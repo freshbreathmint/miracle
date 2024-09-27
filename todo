@@ -1,0 +1,6 @@
+Medium Priority:
+    - Fix Valgrind debugging.
+
+Low Priority:
+    - Move scripts into /scripts subfolder
+    - remove .cmake/ subfolder, merge with /scripts
