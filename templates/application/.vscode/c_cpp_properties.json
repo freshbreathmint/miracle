@@ -4,7 +4,7 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
-                "${workspaceFolder}/miracle/lib/include"
+                "${workspaceFolder}/miracle/lib/core/include"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",
