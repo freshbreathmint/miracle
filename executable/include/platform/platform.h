@@ -18,3 +18,6 @@
 void* open_library(const char* lib_name);
 void* get_function_address(void* handle, const char* func_name);
 void close_library(void* handle);
+
+/* MISC */
+char* get_executable_path();
