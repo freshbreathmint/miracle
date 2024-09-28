@@ -4,9 +4,6 @@ High Priority:
 
 Medium Priority:
     - Fix Valgrind debugging.
-    - Update extension changelog.
 
 Low Priority:
-    - Move scripts into /scripts subfolder.
-    - remove .cmake/ subfolder, merge with /scripts.
-    - Add a license to the framework.
+    - CLEAR
