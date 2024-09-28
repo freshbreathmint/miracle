@@ -3,7 +3,21 @@
 ## IN DEVELOPMENT
 
 Changes: 
-    - N/A
+    - Build System completely reworked.
+        - Task Buttons have been replaced with a new VSCode Extension
+            - Adds an activity tab with two sections:
+                - Project Configuration: Tree View config.ini editor
+                - Build Actions: Buttons for Build/Run/Setup scripts.
+        - CMakeLists.txt is now dynamically created.
+        - Added 'hot compiling' for libraries (normal debug compile + timestamp)
+        - Scripts and file templates have been moved to /scripts sub-directory.
+        - Run/Setup scripts replaced. Project can now be setup with a single button press.
+        - Valgrind debugger still uses a version of the old run script now renamed valgrind_server.sh
+    - Dynamic loading/compiling now based on config.ini in root workspace folder.
+    - Moved libapi backend to MiracleLib, which is now MiracleCore.
+    - Removed /engine from Framework.
+    - Added new default executable icon for windows executables.
+    - Release builds will now be properly named executables based on the config.ini application name.
 
 ## Version 0.4.0
 
