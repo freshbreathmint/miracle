@@ -21,7 +21,8 @@ def copy_contents(source_dir, target_dir):
 
 def handle_application(name, script_dir):
     source_dir = os.path.join(script_dir, 'templates', 'application')
-    target_dir = os.path.abspath(os.path.join(script_dir, '..'))
+    miracle_dir = os.path.abspath(os.path.join(script_dir, '..'))
+    target_dir = miracle_dir
     copy_contents(source_dir, target_dir)
     config_path = os.path.join(target_dir, 'config.ini')
     if not os.path.exists(config_path):
@@ -72,12 +73,13 @@ def handle_library(name, lib_type, script_dir):
     print("Library setup completed.")
 
 def main():
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+
     if len(sys.argv) < 3:
         print("Usage: setup.py <target> <name> [static/dynamic]")
         sys.exit(1)
     target = sys.argv[1]
     name = sys.argv[2]
-    script_dir = os.path.dirname(os.path.abspath(__file__))
     if target == 'application':
         handle_application(name, script_dir)
     elif target == 'library':
