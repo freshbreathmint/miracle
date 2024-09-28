@@ -12,21 +12,17 @@ def is_wsl():
     return 'microsoft' in platform.uname().release.lower()
 
 def main():
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    miracle_dir = os.path.abspath(os.path.join(script_dir, '..'))
-
     # Check if arguments are passed
     if len(sys.argv) < 2:
-        print("No arguments provided. Usage: run.py <command> [arguments...]")
+        print("No arguments provided. Usage: ./run_command.py <command> [arguments...]")
         sys.exit(1)
 
     # Read config.ini to get application name
     config = configparser.ConfigParser()
-    config_path = os.path.join(miracle_dir, 'config.ini')
-    if not os.path.exists(config_path):
+    config_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../config.ini')
+    if not config.read(config_path):
         print(f"Failed to read config.ini at {config_path}.")
         sys.exit(1)
-    config.read(config_path)
 
     if 'application' not in config or 'name' not in config['application']:
         print("config.ini is missing 'application' section or 'name' option.")
