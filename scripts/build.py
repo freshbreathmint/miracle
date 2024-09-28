@@ -9,9 +9,9 @@ import time
 import shutil
 from collections import defaultdict
 
-def parse_config(miracle_dir):
+def parse_config(workspace_dir):
     config = configparser.ConfigParser()
-    config_path = os.path.join(miracle_dir, 'config.ini')
+    config_path = os.path.join(workspace_dir, 'config.ini')
     if not os.path.exists(config_path):
         print(f"Error: config.ini not found at {config_path}")
         sys.exit(1)
@@ -102,7 +102,7 @@ def topological_sort(to_build, application, libraries):
 
     return final_build_order
 
-def generate_cmake(application, build_type, platform, bin_dir_rel, to_build, libraries, exe, link_type, miracle_dir, build_dir):
+def generate_cmake(application, build_type, platform, bin_dir_rel, to_build, libraries, exe, link_type, workspace_dir, build_dir):
     print("Generating CMakeLists.txt")
     print("Build targets:", to_build)
 
@@ -137,27 +137,27 @@ def generate_cmake(application, build_type, platform, bin_dir_rel, to_build, lib
 
     # Collect source files for each target
     cmake_lines.append('# Source Files')
-    cmake_lines.append(f'file(GLOB_RECURSE MIRACLE_CORE_SRC "{os.path.join(miracle_dir, "lib/core/src/*.c")}")\n')
+    cmake_lines.append(f'file(GLOB_RECURSE MIRACLE_CORE_SRC "{os.path.join(workspace_dir, "miracle/lib/core/src/*.c")}")\n')
 
     for target in to_build:
         if target == 'application':
-            cmake_lines.append(f'file(GLOB_RECURSE APPLICATION_SRC "{os.path.join(miracle_dir, "src/*.c")}")')
+            cmake_lines.append(f'file(GLOB_RECURSE APPLICATION_SRC "{os.path.join(workspace_dir, "src/*.c")}")')
         else:
             lib_info = libraries[target]
             lib_name = target
-            lib_path = os.path.join(miracle_dir, lib_info['path'])
+            lib_path = os.path.join(workspace_dir, lib_info['path'])
             cmake_lines.append(f'file(GLOB_RECURSE {lib_name.upper()}_SRC "{os.path.join(lib_path, "src/*.c")}")')
 
     cmake_lines.append('')
 
     if exe:
-        cmake_lines.append(f'file(GLOB_RECURSE INIH_SRC "{os.path.join(miracle_dir, "lib/third_party/inih/src/*.c")}")')
-        cmake_lines.append(f'file(GLOB_RECURSE EXE_SRC "{os.path.join(miracle_dir, "executable/src/*.c")}")\n')
+        cmake_lines.append(f'file(GLOB_RECURSE INIH_SRC "{os.path.join(workspace_dir, "miracle/lib/third_party/inih/src/*.c")}")')
+        cmake_lines.append(f'file(GLOB_RECURSE EXE_SRC "{os.path.join(workspace_dir, "miracle/executable/src/*.c")}")\n')
 
     # Build MIRACLE CORE
     cmake_lines.append('# MIRACLE CORE')
     cmake_lines.append('add_library(miracle_core STATIC ${MIRACLE_CORE_SRC})')
-    cmake_lines.append(f'target_include_directories(miracle_core PUBLIC "{os.path.join(miracle_dir, "lib/core/include")}")\n')
+    cmake_lines.append(f'target_include_directories(miracle_core PUBLIC "{os.path.join(workspace_dir, "miracle/lib/core/include")}")\n')
 
     if link_type == 'dynamic':
         cmake_lib_type = 'SHARED'
@@ -170,7 +170,7 @@ def generate_cmake(application, build_type, platform, bin_dir_rel, to_build, lib
         cmake_lines.append(f'# {target.upper()}')
         if target == 'application':
             cmake_lines.append(f'add_library(application{timestamp} {cmake_lib_type} ${{APPLICATION_SRC}})')
-            cmake_lines.append(f'target_include_directories(application{timestamp} PUBLIC "{os.path.join(miracle_dir, "include")}")')
+            cmake_lines.append(f'target_include_directories(application{timestamp} PUBLIC "{os.path.join(workspace_dir, "include")}")')
             cmake_lines.append(f'target_compile_definitions(application{timestamp} PUBLIC -D{definition})')
 
             # Link dependencies
@@ -188,7 +188,7 @@ def generate_cmake(application, build_type, platform, bin_dir_rel, to_build, lib
             lib_name = target
             lib_type = lib_info['type']
             dependencies = lib_info['dependencies']
-            lib_path = os.path.join(miracle_dir, lib_info['path'])
+            lib_path = os.path.join(workspace_dir, lib_info['path'])
 
             # Determine library type
             if lib_type == 'static':
@@ -217,14 +217,13 @@ def generate_cmake(application, build_type, platform, bin_dir_rel, to_build, lib
         # Build required libs
         cmake_lines.append('# INIH')
         cmake_lines.append('add_library(inih STATIC ${INIH_SRC})')
-        cmake_lines.append(f'target_include_directories(inih PUBLIC "{os.path.join(miracle_dir, "lib/third_party/inih/include")}")\n')
+        cmake_lines.append(f'target_include_directories(inih PUBLIC "{os.path.join(workspace_dir, "miracle/lib/third_party/inih/include")}")\n')
 
         # Build the executable
         cmake_lines.append('# EXECUTABLE')
         cmake_lines.append('add_executable(${PROJECT_NAME} ${EXE_SRC})')
-        cmake_lines.append(f'target_include_directories(${PROJECT_NAME} PUBLIC "{os.path.join(miracle_dir, "executable/include")}")')
-        cmake_lines.append(f'target_compile_definitions(${{
-    PROJECT_NAME}} PUBLIC -D{definition})')
+        cmake_lines.append(f'target_include_directories(${{PROJECT_NAME}} PUBLIC "{os.path.join(workspace_dir, "miracle/executable/include")}")')
+        cmake_lines.append(f'target_compile_definitions(${{PROJECT_NAME}} PUBLIC -D{definition})')
 
         # Link to libraries
         cmake_deps = ['inih', 'miracle_core']
@@ -233,11 +232,11 @@ def generate_cmake(application, build_type, platform, bin_dir_rel, to_build, lib
             for target in to_build:
                 cmake_deps.append(target)
         dep_str = ' '.join(cmake_deps)
-        cmake_lines.append(f'target_link_libraries(${PROJECT_NAME} {dep_str})\n')
+        cmake_lines.append(f'target_link_libraries(${{PROJECT_NAME}} {dep_str})\n')
 
         # Add icon for Windows
         if platform == 'windows':
-            cmake_lines.append(f'target_sources(${PROJECT_NAME} PRIVATE "{os.path.join(miracle_dir, "executable/src/resource.rc")}")')
+            cmake_lines.append(f'target_sources(${{PROJECT_NAME}} PRIVATE "{os.path.join(workspace_dir, "miracle/executable/src/resource.rc")}")')
 
     # Write CMakeLists.txt in build directory
     cmake_file_path = os.path.join(build_dir, 'CMakeLists.txt')
@@ -250,7 +249,7 @@ def run_cmake(build_dir, platform):
     try:
         print(f"Configuring the project with CMake in '{build_dir}'...")
         if platform == 'windows':
-            subprocess.check_call(['cmake', '..', '-DCMAKE_TOOLCHAIN_FILE=.cmake/windows.cmake'], cwd=build_dir)
+            subprocess.check_call(['cmake', '..', '-DCMAKE_TOOLCHAIN_FILE=../lib/.cmake/windows.cmake'], cwd=build_dir)
         else:
             subprocess.check_call(['cmake', '..'], cwd=build_dir)
         print("CMake configuration completed successfully.\n")
@@ -265,13 +264,14 @@ def run_cmake(build_dir, platform):
 def build(args):
     script_dir = os.path.dirname(os.path.abspath(__file__))
     miracle_dir = os.path.abspath(os.path.join(script_dir, '..'))
-    application, libraries = parse_config(miracle_dir)
+    workspace_dir = os.path.abspath(os.path.join(miracle_dir, '..'))
+    application, libraries = parse_config(workspace_dir)
 
     target = args.target
     platform = args.platform
     build_type = args.build_type
 
-    # Determine build directories
+    # Determine build directories inside miracle
     dir_rel = get_directory(platform, build_type)
     build_dir = os.path.join(miracle_dir, 'build', dir_rel)
     bin_dir_rel = os.path.join('bin', dir_rel)
@@ -280,7 +280,7 @@ def build(args):
     os.makedirs(bin_dir_abs, exist_ok=True)
 
     # Copy config.ini if building dynamically
-    config_ini_path = os.path.join(miracle_dir, 'config.ini')
+    config_ini_path = os.path.join(workspace_dir, 'config.ini')
     try:
         shutil.copy(config_ini_path, bin_dir_abs)
         print(f"Copied 'config.ini' to '{bin_dir_abs}'.")
@@ -326,7 +326,7 @@ def build(args):
     to_build = topological_sort(to_build, application, libraries)
 
     # Generate CMakeLists.txt
-    generate_cmake(application, build_type, platform, bin_dir_rel, to_build, libraries, exe=False, link_type='dynamic', miracle_dir=miracle_dir, build_dir=build_dir)
+    generate_cmake(application, build_type, platform, bin_dir_rel, to_build, libraries, exe=False, link_type='dynamic', workspace_dir=workspace_dir, build_dir=build_dir)
 
     # Run CMake
     run_cmake(build_dir, platform)
@@ -334,13 +334,14 @@ def build(args):
 def build_exe(args):
     script_dir = os.path.dirname(os.path.abspath(__file__))
     miracle_dir = os.path.abspath(os.path.join(script_dir, '..'))
-    application, libraries = parse_config(miracle_dir)
+    workspace_dir = os.path.abspath(os.path.join(miracle_dir, '..'))
+    application, libraries = parse_config(workspace_dir)
 
     platform = args.platform
     build_type = args.build_type
     link_type = args.link
 
-    # Determine build directories
+    # Determine build directories inside miracle
     dir_rel = get_directory(platform, build_type)
     build_dir = os.path.join(miracle_dir, 'build', dir_rel)
     bin_dir_rel = os.path.join('bin', dir_rel)
@@ -349,7 +350,7 @@ def build_exe(args):
     os.makedirs(bin_dir_abs, exist_ok=True)
 
     # Copy config.ini if building dynamically
-    config_ini_path = os.path.join(miracle_dir, 'config.ini')
+    config_ini_path = os.path.join(workspace_dir, 'config.ini')
     if link_type == 'dynamic':
         try:
             shutil.copy(config_ini_path, bin_dir_abs)
@@ -372,7 +373,7 @@ def build_exe(args):
     to_build = topological_sort(to_build, application, libraries)
 
     # Generate CMakeLists.txt with exe=True
-    generate_cmake(application, build_type, platform, bin_dir_rel, to_build, libraries, exe=True, link_type=link_type, miracle_dir=miracle_dir, build_dir=build_dir)
+    generate_cmake(application, build_type, platform, bin_dir_rel, to_build, libraries, exe=True, link_type=link_type, workspace_dir=workspace_dir, build_dir=build_dir)
 
     # Run CMake
     run_cmake(build_dir, platform)

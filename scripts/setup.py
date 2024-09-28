@@ -21,8 +21,10 @@ def copy_contents(source_dir, target_dir):
 
 def handle_application(name, script_dir):
     source_dir = os.path.join(script_dir, 'templates', 'application')
+    # The target directory is the workspace directory (parent of miracle)
     miracle_dir = os.path.abspath(os.path.join(script_dir, '..'))
-    target_dir = miracle_dir
+    workspace_dir = os.path.abspath(os.path.join(miracle_dir, '..'))
+    target_dir = workspace_dir
     copy_contents(source_dir, target_dir)
     config_path = os.path.join(target_dir, 'config.ini')
     if not os.path.exists(config_path):
@@ -42,7 +44,10 @@ def handle_library(name, lib_type, script_dir):
         source_dir = os.path.join(script_dir, 'templates', 'library-static')
     else:
         source_dir = os.path.join(script_dir, 'templates', 'library-dynamic')
-    target_dir = os.path.abspath(os.path.join(script_dir, '..', name))
+    # The target directory is the workspace directory
+    miracle_dir = os.path.abspath(os.path.join(script_dir, '..'))
+    workspace_dir = os.path.abspath(os.path.join(miracle_dir, '..'))
+    target_dir = os.path.abspath(os.path.join(workspace_dir, name))
     if os.path.exists(target_dir):
         shutil.rmtree(target_dir)
     shutil.copytree(source_dir, target_dir)
