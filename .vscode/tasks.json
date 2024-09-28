@@ -7,7 +7,7 @@
         {
             "label": "valgrind",
             "type": "shell",
-            "command": "./run.py valgrind --vgdb-error=0 --vgdb=full bin/linux/debug/executable",
+            "command": "./scripts/valgrind_server.sh",
             "isBackground": true,
         },
         {
