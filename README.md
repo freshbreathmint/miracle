@@ -24,8 +24,6 @@ Follow these steps to set up your project using the Miracle Framework:
 4. **Open the Miracle Workspace**:  
    When prompted, open the `miracle.code-workspace` file to load the newly created workspace configuration.
 
-For a more detailed guide on setting up your application, please visit the [Application Setup Guide](doc/Application%20Setup.md).
-
 ## Credits & Contribution
 
 Developed by Mints
