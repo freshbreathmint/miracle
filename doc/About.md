@@ -4,50 +4,49 @@
 
 ## Overview
 
-The Miracle Framework is a software development framework designed to offer flexibility, modularity, and cross-platform compatibility. 
+The Miracle Framework is a versatile, modular software development framework designed to provide flexibility, cross-platform compatibility, and dynamic functionality. Its core philosophy focuses on delivering a development environment where components can be linked both statically and dynamically, allowing developers to choose the best approach for their project needs.
 
-Miracle Framework is cross-platform, abstracting away differences between Windows and Linux. This simplifies development, allowing developers to focus on building their application without worrying about platform-specific details.
+The framework supports defining new libraries dynamically through a project configuration file. Each library can be set as static or dynamic. Dynamic libraries are compiled as shared libraries, with dependencies automatically resolved at runtime using the framework’s built-in function resolution API. This API registers and resolves function pointers whenever a library is loaded. Future updates will expand this system to support hot reloading, enabling developers to reload libraries at runtime without restarting the application, while maintaining proper updates for dependent libraries. Static libraries, on the other hand, are linked traditionally at compile time to libraries that specify it as a dependency.
 
-Users can dynamically define new libraries in the configuration file, specifying each as either "static" or "dynamic." Dynamic libraries are compiled as shared libraries and can depend on other dynamic libraries. These dependencies are automatically resolved at runtime through a built-in function that registers and resolves function pointers when a library is loaded. In the future, this feature will be extended to support reloading libraries at runtime to replace old ones without restarting the application.
+Miracle Framework is designed for flexibility, offering both fully static binaries and a dynamic loading system for modular applications. It also automates aspects of release builds, such as naming binaries according to the application and embedding a custom icon in Windows executables.
 
-The framework offers both static and dynamic compilation, allowing developers to create fully static binaries or leverage the aforementioned dynamic loading system as needed. 
+Once hot reloading is fully implemented, the framework will be considered stable, with version 1.0.0 marking its official release. From that point, work will also begin on developing the **Sage Engine**—a game engine built on the Miracle Framework. Future development will focus on expanding both the framework's capabilities and the Sage Engine by developing various applications and games.
 
-Once hot reloading is fully implemented, and the framework can be considered stable, development will begin on an application utilizing the Sage Engine (a game engine that will be built as a dynamic library for the framework). At that point, the framework will be released as version 1.0.0, and further applications will be developed to help extend the framework's capabilities.
-
-## Design
+## Details
 
 The Miracle Framework is developed with a strong emphasis on modularity, cross-platform support, and extensibility. Its architecture allows for flexible management of libraries, supporting both dynamic and static loading to suit a wide range of project needs.
 
-### Architecture & Dependency Structure
+## Architecture & Dependency Structure
 
-The Miracle Framework treats the application as a dynamic library that is loaded last and contains the program’s entry point. The modular system architecture is designed as follows:
+The Miracle Framework treats the application itself as a dynamic library loaded at runtime. This creates a system where the application, dynamic libraries, and static libraries interact in a modular, layered manner:
 
-- **Dynamic Libraries** are loaded at runtime. They may depend on other dynamic libraries, with the framework automatically resolving dependencies when they are loaded.
-- **Static Libraries** are compiled directly into the application or other dynamic libraries.
+- **Dynamic Libraries**: Loaded during runtime and capable of depending on other dynamic libraries. The framework handles dependency resolution automatically, registering and resolving function pointers as needed.
+- **Static Libraries**: Linked directly to either the application or other dynamic libraries during the compile phase.
 
-This structure enables a modular approach to development, where components can eventually be compiled and loaded individually during runtime. The application can also be compiled into a fully static executable for release builds if needed.
+This architecture allows for an approach where components can be individually developed and loaded dynamically at runtime, or alternatively, compiled into a fully static executable.
 
 ### Miracle Core Library
 
-The **Miracle Core** library is a static library linked automatically with every dynamic library, the application, and the framework executable. It provides essential shared functions such as data structures and framework-specific utilities.
+**Miracle Core** is a static library utilized by dynamic libraries, the application, and the framework, providing essential utilities such as data structures and internal functionality such as the function resolution API.
 
 ### Sage Engine
 
-The **Sage Engine** is a planned game engine built on top of the Miracle Framework. It will offer a robust set of tools for game development, including state management and rendering systems. When creating a new application through the framework's Visual Studio Code extension, users will have the option to automatically include the Sage Engine in their project.
+The **Sage Engine** is an in-development game engine built on top of the Miracle Framework. Its goal is to provide a rich set of tools tailored for game development, including features for rendering, input handling, state management, and more. Future versions of the Miracle Framework Visual Studio Code extension will enable automatic integration of the Sage Engine into new projects.
 
 ## Usage
 
 To get started with the Miracle Framework:
 
 1. **Download the Extension**: Install the Miracle Framework extension for Visual Studio Code.
-2. **Set Up the Workspace**: Press "Setup Workspace" to automatically create a default application in your project folder and clone the framework as a submodule.
-3. **Develop Your Application**: Use the "Add Library" feature in the extension to add static or dynamic libraries as needed, and configure them using the configuration editor.
+2. **Initialize a Repo**: Initialize a git repo in the project folder.
+3. **Set Up the Workspace**: Press "Setup Workspace" to automatically create a default application in your project folder and clone the framework as a submodule.
+4. **Develop Your Application**: Use the "Add Library" feature in the extension to add static or dynamic libraries as needed, and configure them using the configuration editor.
 
 For more details on using the Miracle Framework extension, see the [VSC Extension Guide](doc/VSC%20Extension.md).
 
 ## Current State
 
-Significant progress has been made, with core mechanisms for dynamic library loading, function resolution, and cross-platform support implemented in a basic form. The next development phase will focus on implementing the hot reloading feature and beginning development on the Sage Engine.
+Significant progress has been made, with core mechanisms for dynamic library loading, function resolution, and cross-platform support implemented. The next development phase will focus on implementing the hot reloading feature and beginning development on the Sage Engine.
 
 ## Future Plans
 
