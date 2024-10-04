@@ -68,9 +68,7 @@ static void process_library(const char* lib_name, ConfigContext* context, char**
     }
 
     // After processing dependencies, add lib_name to load_list
-    char* fixed_name = malloc(strlen(lib_name) + strlen("lib") + 1);
-    strcpy(fixed_name, "lib");
-    strcat(fixed_name, lib_name);
+    char* fixed_name = strdup(lib_name);
     *load_list = array_push(char*, *load_list, &fixed_name);
 }
 
@@ -239,17 +237,22 @@ bool load_libraries_from_config(const char* config_file) {
         // Load the libraries
         size_t load_list_len = array_length(load_list);
         for (size_t i = 0; i < load_list_len; i++) {
-            load_library(load_list[i]);
+            // Prepend "lib" to the library name
+            char* library_name = malloc(strlen("lib") + strlen(load_list[i]) + 1);
+            strcpy(library_name, "lib");
+            strcat(library_name, load_list[i]);
+            load_library(library_name);
+            free(library_name);
         }
+
+        // Load the application
+        load_library("libapplication");
 
         // Clean up load_list
         for (size_t i = 0; i < load_list_len; i++) {
             free(load_list[i]);
         }
         array_free(load_list);
-
-        // Load the application
-        load_library("libapplication");
     }
 
     // Free the path
