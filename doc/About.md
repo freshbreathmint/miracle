@@ -44,6 +44,8 @@ To get started with the Miracle Framework:
 
 For more details on using the Miracle Framework extension, see the [VSC Extension Guide](doc/VSC%20Extension.md).
 
+To learn more about developing your application, try reading [Application Example](doc/Application%20Example.md).
+
 ## Current State
 
 Significant progress has been made, with core mechanisms for dynamic library loading, function resolution, and cross-platform support implemented. The next development phase will focus on implementing the hot reloading feature and beginning development on the Sage Engine.
