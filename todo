@@ -9,3 +9,4 @@ Medium Priority:
 
 Low Priority:
     - Figure out if we should put application /include and /src under another subfolder
+    - Add documentation explaining how to use MiracleCore stuff
