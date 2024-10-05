@@ -1,8 +1,11 @@
 High Priority:
-    - Re-document and push v0.5.0 release.
+    - Hot Reloading
+    - Memory Usage, Logging, Profiling
 
 Medium Priority:
-    - CLEAR
+    - Implement Sage support for Setup Workspace command in the extension
+        - Automatically add Sage as a submodule to /lib
+        - Setup project with Sage specific workspace file and template that uses Sage engine.
 
 Low Priority:
-    - CLEAR
+    - Figure out if we should put application /include and /src under another subfolder
