@@ -11,7 +11,7 @@
 #elif defined(__linux__) || defined(__linux)
     #define PLATFORM_LINUX 1
 #else
-    #error "Unknown/Unsupported Platform"
+    #error "MIRACLE: Unknown/Unsupported Platform"
 #endif
 
 /* LIBRARY LOADING */
