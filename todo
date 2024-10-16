@@ -6,6 +6,9 @@ Medium Priority:
     - Implement Sage support for Setup Workspace command in the extension
         - Automatically add Sage as a submodule to /lib
         - Setup project with Sage specific workspace file and template that uses Sage engine.
+    - Change the way that the framework extension's action menu is set up
+        - There should be a single dropdown menu for project settings
+        - Build Executable, Full Hot Compile, Run Executable should all be just buttons beneath the drop-downs.
 
 Low Priority:
     - Figure out if we should put application /include and /src under another subfolder
